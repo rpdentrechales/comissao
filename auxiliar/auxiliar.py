@@ -53,3 +53,47 @@ def upload_dataframe_to_mongodb(collection_name,database_name, dataframe, unique
 def convert_name_to_id(name):
   id = hashlib.md5(name.encode()).hexdigest()[:12]
   return id
+
+import pandas as pd
+from pymongo import MongoClient, UpdateOne
+
+def sync_dataframe(collection_name, database_name, dataframe, unique_key):
+  print(f"Syncing data to {database_name} : {collection_name}")
+  
+  client = MongoClient(f"mongodb+srv://rpdprocorpo:iyiawsSCfCsuAzOb@cluster0.lu6ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+  db = client[database_name]
+  collection = db[collection_name]
+
+    # Get existing collection data
+    existing_data = pd.DataFrame(list(collection.find()))
+    if '_id' in existing_data.columns:
+        existing_data = existing_data.drop(columns=['_id'])
+
+    # Find rows to delete
+    rows_to_delete = existing_data[~existing_data[unique_key].isin(dataframe[unique_key])][unique_key].tolist()
+
+    # Delete rows not in DataFrame
+    if rows_to_delete:
+        collection.delete_many({unique_key: {"$in": rows_to_delete}})
+
+    # Update/Insert DataFrame rows
+    bulk_operations = []
+    for _, row in dataframe.iterrows():
+        item = row.to_dict()
+        query = {unique_key: item[unique_key]}
+        update = {"$set": item}
+        bulk_operations.append(UpdateOne(query, update, upsert=True))
+
+    if bulk_operations:
+        result = collection.bulk_write(bulk_operations)
+        results = {
+          "inserted": result.upserted_count,
+          "updated": result.modified_count,
+          "matched": result.matched_count,
+      }
+    else:
+        results = {"inserted": 0, "updated": 0, "matched": 0}
+
+    print(f"Sync results: {database_name} : {collection_name} - {results}")
+
+    return results
