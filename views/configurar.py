@@ -30,6 +30,13 @@ if seletor_pagina == "Prestadoras":
       "funcao_prestadora": st.column_config.SelectboxColumn("Função da Prestadora",width="medium",options=opcoes_funcoes)
   }
 
+  editar_linhas = st.toggle("Deletar linhas",value=False)
+  
+  if editar_linhas:
+    num_rows = "dynamic"
+  else:
+    num_rows = "fixed"
+    
   edited_prestadora_df = st.data_editor(prestadora_df,
                                         use_container_width=True,
                                         hide_index=True,
