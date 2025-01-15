@@ -36,17 +36,18 @@ if seletor_pagina == "Prestadoras":
     num_rows = "dynamic"
   else:
     num_rows = "fixed"
-    
+
   edited_prestadora_df = st.data_editor(prestadora_df,
                                         use_container_width=True,
                                         hide_index=True,
                                         column_order=column_order_prestadoras,
                                         column_config=column_config_prestadoras,
-                                        num_rows="dynamic")
+                                        num_rows=num_rows)
 
   if st.button("Salvar alterações"):
 
     st.session_state["dados_prestadoras"] = edited_prestadora_df
+    st.write(edited_prestadora_df)
     result = sync_dataframe(collection_name="prestadores_db",database_name="relatorio_comissao", dataframe=edited_prestadora_df, unique_key="nome_prestador")
     st.success("Alterações salvas com sucesso!")
 
