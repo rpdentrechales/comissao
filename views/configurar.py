@@ -30,7 +30,12 @@ if seletor_pagina == "Prestadoras":
       "funcao_prestadora": st.column_config.SelectboxColumn("Função da Prestadora",width="medium",options=opcoes_funcoes)
   }
 
-  edited_prestadora_df = st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order_prestadoras,column_config=column_config_prestadoras)
+  edited_prestadora_df = st.data_editor(prestadora_df,
+                                        use_container_width=True,
+                                        hide_index=True,
+                                        column_order=column_order_prestadoras,
+                                        column_config=column_config_prestadoras,
+                                        num_rows="dynamic")
 
   if st.button("Salvar alterações"):
 
