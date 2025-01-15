@@ -15,10 +15,15 @@ if seletor_pagina == "Prestadoras":
   if "dados_prestadoras" in st.session_state:
     prestadora_df = st.session_state["dados_prestadoras"]
   else:
-    prestadora_df = get_dataframe_from_mongodb(collection_name="dados_vendedoras", database_name="rpd_db")
+    prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
     st.session_state["dados_prestadoras"] = prestadora_df
 
-  st.data_editor(prestadora_df)
+  column_order = [""]
+  column_config = {
+      
+  }
+
+  st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order, column_config=column_config)
 
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
