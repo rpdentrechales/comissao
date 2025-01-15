@@ -24,7 +24,7 @@ if seletor_pagina == "Prestadoras":
       "funcao_prestador": st.column_config.TextColumn("Função da Prestadora",width="medium")
   }
 
-  edited_df = st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order, column_config=column_config)
+  edited_df = st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_config=column_config)
 
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
