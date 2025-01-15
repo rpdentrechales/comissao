@@ -64,36 +64,36 @@ def sync_dataframe(collection_name, database_name, dataframe, unique_key):
   db = client[database_name]
   collection = db[collection_name]
 
-    # Get existing collection data
-    existing_data = pd.DataFrame(list(collection.find()))
-    if '_id' in existing_data.columns:
-        existing_data = existing_data.drop(columns=['_id'])
+  # Get existing collection data
+  existing_data = pd.DataFrame(list(collection.find()))
+  if '_id' in existing_data.columns:
+      existing_data = existing_data.drop(columns=['_id'])
 
-    # Find rows to delete
-    rows_to_delete = existing_data[~existing_data[unique_key].isin(dataframe[unique_key])][unique_key].tolist()
+  # Find rows to delete
+  rows_to_delete = existing_data[~existing_data[unique_key].isin(dataframe[unique_key])][unique_key].tolist()
 
-    # Delete rows not in DataFrame
-    if rows_to_delete:
-        collection.delete_many({unique_key: {"$in": rows_to_delete}})
+  # Delete rows not in DataFrame
+  if rows_to_delete:
+      collection.delete_many({unique_key: {"$in": rows_to_delete}})
 
-    # Update/Insert DataFrame rows
-    bulk_operations = []
-    for _, row in dataframe.iterrows():
-        item = row.to_dict()
-        query = {unique_key: item[unique_key]}
-        update = {"$set": item}
-        bulk_operations.append(UpdateOne(query, update, upsert=True))
+  # Update/Insert DataFrame rows
+  bulk_operations = []
+  for _, row in dataframe.iterrows():
+      item = row.to_dict()
+      query = {unique_key: item[unique_key]}
+      update = {"$set": item}
+      bulk_operations.append(UpdateOne(query, update, upsert=True))
 
-    if bulk_operations:
-        result = collection.bulk_write(bulk_operations)
-        results = {
-          "inserted": result.upserted_count,
-          "updated": result.modified_count,
-          "matched": result.matched_count,
-      }
-    else:
-        results = {"inserted": 0, "updated": 0, "matched": 0}
+  if bulk_operations:
+      result = collection.bulk_write(bulk_operations)
+      results = {
+        "inserted": result.upserted_count,
+        "updated": result.modified_count,
+        "matched": result.matched_count,
+    }
+  else:
+      results = {"inserted": 0, "updated": 0, "matched": 0}
 
-    print(f"Sync results: {database_name} : {collection_name} - {results}")
+  print(f"Sync results: {database_name} : {collection_name} - {results}")
 
-    return results
+  return results
