@@ -41,4 +41,10 @@ if seletor_pagina == "Comissões":
       "comissao": st.column_config.NumberColumn("Comissão",width="medium",format="R$%.2f")
   }
 
-  edited_comissao_df = st.data_editor(comissao_df,use_container_width=False,hide_index=True, column_order=column_order,column_config=column_config)  
+  edited_comissao_df = st.data_editor(comissao_df,
+                                      use_container_width=False,
+                                      hide_index=True,
+                                       column_order=column_order,
+                                      column_config=column_config,
+                                      num_rows="dynamic"
+                                      )  
