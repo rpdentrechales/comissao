@@ -15,7 +15,7 @@ if seletor_pagina == "Prestadoras":
   if "dados_prestadoras" in st.session_state:
     prestadora_df = st.session_state["dados_prestadoras"]
   else:
-    prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
+    prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao",reset_cache=1)
     st.session_state["dados_prestadoras"] = prestadora_df
 
   column_order = [""]
