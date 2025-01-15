@@ -32,6 +32,12 @@ if seletor_pagina == "Prestadoras":
 
   edited_prestadora_df = st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order_prestadoras,column_config=column_config_prestadoras)
 
+  if st.button("Salvar alterações"):
+
+    st.session_state["dados_prestadoras"] = edited_prestadoras_df
+    result = sync_dataframe(collection_name="prestadores_db",database_name="relatorio_prestadoras", dataframe=edited_comissao_df, unique_key="funcao_prestadora")
+    st.success("Alterações salvas com sucesso!")
+
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
   
