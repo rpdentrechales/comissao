@@ -51,7 +51,7 @@ if seletor_pagina == "Comissões":
   
   if st.button("Salvar alterações"):
 
-    edited_comissao_df = edited_comissao_df.loc[edited_comissao_df["funcao_prestadora"].isna()]
+    edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df["funcao_prestadora"].isna()]
     st.session_state["dados_prestadoras"] = edited_comissao_df
     result = sync_dataframe(collection_name="comissoes",database_name="relatorio_comissao", dataframe=edited_comissao_df, unique_key="funcao_prestadora")
     st.success("Alterações salvas com sucesso!")
