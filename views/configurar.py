@@ -38,7 +38,7 @@ if seletor_pagina == "Comissões":
   column_order = ["funcao_prestadora","comissao"]
   column_config = {
       "funcao_prestadora": st.column_config.TextColumn("Função da Prestadora",width="medium",disabled=True),
-      "comissao": st.column_config.NumberColumn("Comissão",width="small",format="R$%.2f")
+      "comissao": st.column_config.NumberColumn("Comissão",width="medium",format="R$%.2f")
   }
 
   edited_comissao_df = st.data_editor(comissao_df,use_container_width=False,hide_index=True, column_order=column_order,column_config=column_config)  
