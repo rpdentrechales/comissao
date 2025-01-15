@@ -50,7 +50,7 @@ if seletor_pagina == "Comissões":
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
                                       hide_index=True,
-                                       column_order=column_order_comissao,
+                                      column_order=column_order_comissao,
                                       column_config=column_config_comissao,
                                       num_rows="dynamic"
                                       )
