@@ -9,7 +9,7 @@ st.title("Configurações")
 seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões"],selection_mode="single",default="Prestadoras")
 
 
-if seletor_pagina == "Configurar prestadoras":
+if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
   if "dados_prestadoras" in st.session_state:
@@ -20,5 +20,5 @@ if seletor_pagina == "Configurar prestadoras":
 
   st.data_editor(prestadora_df)
 
-if seletor_pagina == "Configurar comissões":
+if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
