@@ -6,7 +6,7 @@ from auxiliar.auxiliar import *
 st.set_page_config(page_title="Pró-Corpo - Configurações", page_icon="💎",layout="wide")
 
 st.title("Configurações")
-seletor_pagina = st.pills(["Configurar prestadoras", "Configurar comissões"],selection_mode="single",default="Configurar porestadoras")
+seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões"],selection_mode="single",default="Configurar porestadoras")
 
 
 if seletor_pagina == "Configurar prestadoras":
