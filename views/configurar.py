@@ -24,7 +24,7 @@ if seletor_pagina == "Prestadoras":
       "funcao_prestadora": st.column_config.TextColumn("Função da Prestadora",width="medium")
   }
 
-  edited_df = st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order,column_config=column_config)
+  edited_prestadora_df = st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order,column_config=column_config)
 
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
@@ -35,4 +35,10 @@ if seletor_pagina == "Comissões":
     comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
     st.session_state["dados_comissao"] = comissao_df
 
-  st.data_editor(comissao_df)  
+  column_order = ["funcao_prestadora","comissao"]
+  column_config = {
+      "funcao_prestadora": st.column_config.TextColumn("Função da Prestadora",width="medium",disabled=True),
+      "comissao": st.column_config.NumberColumn("Comissão",width="medium",format="R$%.2f")
+  }
+
+  edited_comissao_df = st.data_editor(comissao_df,use_container_width=True,hide_index=True, column_order=column_order,column_config=column_config)  
