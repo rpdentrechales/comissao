@@ -22,8 +22,8 @@ if seletor_pagina == "Prestadoras":
   column_config = {
       
   }
-
-  st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order, column_config=column_config)
+  st.data_editor(prestadora_df)
+  # st.data_editor(prestadora_df,use_container_width=True,hide_index=True, column_order=column_order, column_config=column_config)
 
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
