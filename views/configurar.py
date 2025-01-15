@@ -28,3 +28,11 @@ if seletor_pagina == "Prestadoras":
 
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
+  
+  if "dados_comissao" in st.session_state:
+    comissao_df = st.session_state["dados_comissao"]
+  else:
+    comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
+    st.session_state["dados_comissao"] = comissao_df
+
+  st.data_editor(comissao_df)  
