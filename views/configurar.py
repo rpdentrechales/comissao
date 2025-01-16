@@ -31,9 +31,10 @@ if seletor_pagina == "Prestadoras":
   }
 
   editar_linhas = st.toggle("Deletar linhas",value=False)
-  
+
   if editar_linhas:
     num_rows = "dynamic"
+
   else:
     num_rows = "fixed"
 
@@ -46,14 +47,14 @@ if seletor_pagina == "Prestadoras":
 
   if st.button("Salvar alterações"):
 
-    st.session_state["dados_prestadoras"] = edited_prestadora_df
+    st.session_state["dados_prestadoras"] = edited_prestadora_df[column_order_prestadoras]
     st.write(edited_prestadora_df.columns)
     result = sync_dataframe(collection_name="prestadores_db",database_name="relatorio_comissao", dataframe=edited_prestadora_df, unique_key="nome_prestador")
     st.success("Alterações salvas com sucesso!")
 
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
-  
+
   if "dados_comissao" in st.session_state:
     comissao_df = st.session_state["dados_comissao"]
   else:
@@ -73,10 +74,10 @@ if seletor_pagina == "Comissões":
                                       column_config=column_config_comissao,
                                       num_rows="dynamic"
                                       )
-  
+
   if st.button("Salvar alterações"):
 
     edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df["funcao_prestadora"].isna()]
-    st.session_state["dados_comissao"] = edited_comissao_df
+    st.session_state["dados_comissao"] = edited_comissao_df[column_order_comissao]
     result = sync_dataframe(collection_name="comissoes",database_name="relatorio_comissao", dataframe=edited_comissao_df, unique_key="funcao_prestadora")
     st.success("Alterações salvas com sucesso!")
