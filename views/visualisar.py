@@ -55,7 +55,7 @@ if "id" in url_parameters:
 
     st.subheader("Detalhe diário:")
     colunas = ["Data","ID agendamento","Procedimento","Unidade do agendamento"]
-    st.dataframe(filtered_atendimentos_df[colunas],hide_index=True,use_cotainer_width=True)
+    st.dataframe(filtered_atendimentos_df[colunas],hide_index=True,use_container_width=True)
 
     error_page = False
 
