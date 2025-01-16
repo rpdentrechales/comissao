@@ -44,13 +44,14 @@ if "id" in url_parameters:
       st.metric(label="Atendimentos Totais", value=f"atendimentos_totais")
 
       atendimentos_graph = plot_bar_graph(groupby_dia, "ID agendamento")
+      st.plotly_chart(atendimentos_graph, use_container_width=True)
 
     with metrica_mes_2:
       comissao_total = filtered_atendimentos_df["comissao"].sum()
       st.metric(label="Comissão total", value=f"R$ {comissao_total:,.2f}")
 
       comissao_graph = plot_bar_graph(groupby_dia, "comissao")
-
+      st.plotly_chart(comissao_graph, use_container_width=True)
 
     st.dataframe(filtered_atendimentos_df)
     error_page = False
