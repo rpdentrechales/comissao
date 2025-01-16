@@ -25,7 +25,12 @@ if "id" in url_parameters:
 
     st.title(f"Comissões - {nome_prestadora}")
 
-    st.dataframe(atendimentos_df)
+    meses = sorted(atendimentos_df["period"].unique(),reverse=True)
+
+    seletor_mes = st.selectbox("Selecione um mês", meses)
+    filtered_atendimentos_df = atendimentos_df.loc[atendimentos_df["period"] == seletor_mes]
+
+    st.dataframe(filtered_atendimentos_df)
     error_page = False
 
 if error_page:
