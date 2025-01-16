@@ -59,7 +59,7 @@ from pymongo import MongoClient, UpdateOne
 
 def sync_dataframe(collection_name, database_name, dataframe, unique_key):
   print(f"Syncing data to {database_name} : {collection_name}")
-  
+
   client = MongoClient(f"mongodb+srv://rpdprocorpo:iyiawsSCfCsuAzOb@cluster0.lu6ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   db = client[database_name]
   collection = db[collection_name]

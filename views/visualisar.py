@@ -12,15 +12,18 @@ error_page = True
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
-  prestadora_df = get_dataframe_from_mongodb(collection_name="dados_vendedoras", database_name="rpd_db")
-  prestadora_df = prestadora_df.loc[prestadora_df["id_prestadora"] == id_vendedora]
-  nome_vendedora = prestadora_df["nome_vendedora"].iloc[0]
+  prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
+  prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
+  nome_prestadora = prestadora_df["nome_prestadora"].iloc[0]
+  funcao_prestadora = prestadora_df["funcao_prestadora"].iloc[0]
 
-  if nome_vendedora:
-    query = {"created_by": nome_vendedora,"status":"completed"}
-    get_dataframe_from_mongodb("relatorio_comissao", "agendamentos_db")
-    billcharges_prestadora_df = get_dataframe_from_mongodb(collection_name="billcharges_db", database_name="dash_midia",query=query)
+  if nome_prestadora:
+    query = {"Prestador": nome_prestadora}
+    atendimentos_df = get_dataframe_from_mongodb(collection_name="agendamentos_db", database_name="relatorio_comissao",query=query)
 
+    st.title(f"Comissões - {nome_prestadora}")
+
+    st.dataframe(atendimentos_df)
     error_page = False
 
 if error_page:
