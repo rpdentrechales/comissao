@@ -55,6 +55,8 @@ if "id" in url_parameters:
 
     st.subheader("Detalhe diário:")
     colunas = ["Data","ID agendamento","Procedimento","Unidade do agendamento"]
+    resumo_df = filtered_atendimentos_df[colunas]
+    resumo_df["Data"] = resumo_df["Data"].dt.strftime('%d/%m/%Y')
     st.dataframe(filtered_atendimentos_df[colunas],hide_index=True,use_container_width=True)
 
     error_page = False
