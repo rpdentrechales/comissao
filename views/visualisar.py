@@ -20,6 +20,7 @@ if "id" in url_parameters:
   if nome_prestadora:
     query = {"Prestador": nome_prestadora}
     atendimentos_df = get_dataframe_from_mongodb(collection_name="agendamentos_db", database_name="relatorio_comissao",query=query)
+    atendimentos_df['period'] = atendimentos_df['Data'].dt.to_period('M')
 
     st.title(f"Comissões - {nome_prestadora}")
 
