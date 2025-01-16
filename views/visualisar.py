@@ -8,18 +8,27 @@ st.set_page_config(page_title="Pró-Corpo - Visualizar Comissões", page_icon="�
 
 url_parameters = st.query_params
 error_page = True
+erro_message = "ID não encontrado"
 
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
   prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
   prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
-  nome_prestadora = prestadora_df["nome_prestador"].iloc[0]
-  funcao_prestadora = prestadora_df["funcao_prestadora"].iloc[0]
+  if prestadora_df.empty:
+    error_page = True
+    erro_message = "ID da prestadora não encontrado..."
+  else:
+    nome_prestadora = prestadora_df["nome_prestador"].iloc[0]
+    funcao_prestadora = prestadora_df["funcao_prestadora"].iloc[0]
 
   comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
   comissao_df = comissao_df.loc[comissao_df["funcao_prestadora"] == funcao_prestadora]
-  comissao = comissao_df["comissao"].iloc[0]
+  if comissao_df.empty:
+    error_page = True
+    erro_message = "Erro no cadastro da Pretadora.\nPor favor, atualize o cadastro."
+  else:
+    comissao = comissao_df["comissao"].iloc[0]
 
   if nome_prestadora:
     query = {"Prestador": nome_prestadora}
@@ -63,4 +72,4 @@ if "id" in url_parameters:
     error_page = False
 
 if error_page:
-  st.title("Página não encontrada")
+  st.title(erro_message)
