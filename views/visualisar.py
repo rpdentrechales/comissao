@@ -43,14 +43,14 @@ if "id" in url_parameters:
       atendimentos_totais = filtered_atendimentos_df["ID agendamento"].nunique()
       st.metric(label="Atendimentos Totais", value=f"atendimentos_totais")
 
-      atendimentos_graph = plot_bar_graph(groupby_dia, "ID agendamento")
+      atendimentos_graph = plot_bar_graph(groupby_dia, "ID agendamento","Agendamentos por dia")
       st.plotly_chart(atendimentos_graph, use_container_width=True)
 
     with metrica_mes_2:
       comissao_total = filtered_atendimentos_df["comissao"].sum()
       st.metric(label="Comissão total", value=f"R$ {comissao_total:,.2f}")
 
-      comissao_graph = plot_bar_graph(groupby_dia, "comissao")
+      comissao_graph = plot_bar_graph(groupby_dia, "comissao","Comissão por dia (R$)")
       st.plotly_chart(comissao_graph, use_container_width=True)
 
     st.dataframe(filtered_atendimentos_df)
