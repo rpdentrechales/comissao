@@ -11,17 +11,17 @@ error_page = False
 erro_message = "ID não encontrado"
 
 if "cache_reset" in st.session_state:
-  cache_reset = st.session_state["cache_reset"]
+  reset_cache = st.session_state["reset_cache"]
 else:
-  cache_reset = 0
-  st.session_state["cache_reset"] = cache_reset
+  reset_cache = 0
+  st.session_state["reset_cache"] = reset_cache
 
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
   prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db",
                                              database_name="relatorio_comissao",
-                                             cache_reset = cache_reset)
+                                             reset_cache = reset_cache)
   
   prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
   if prestadora_df.empty:
@@ -51,8 +51,8 @@ if "id" in url_parameters:
     
     if recarregar:
 
-      cache_reset += 1
-      st.session_state["cache_reset"] = cache_reset
+      reset_cache += 1
+      st.session_state["reset_cache"] = reset_cache
 
   else:
 
