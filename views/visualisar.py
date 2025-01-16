@@ -14,7 +14,7 @@ if "id" in url_parameters:
   id_prestadora = st.query_params["id"]
   prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
   prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
-  nome_prestadora = prestadora_df["nome_prestadora"].iloc[0]
+  nome_prestadora = prestadora_df["nome_prestador"].iloc[0]
   funcao_prestadora = prestadora_df["funcao_prestadora"].iloc[0]
 
   if nome_prestadora:
