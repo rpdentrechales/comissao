@@ -97,3 +97,23 @@ def sync_dataframe(collection_name, database_name, dataframe, unique_key):
   print(f"Sync results: {database_name} : {collection_name} - {results}")
 
   return results
+
+import plotly.express as px
+import pandas as pd
+
+def plot_bar_graph(df, y_axis_column):
+
+  df['Data'] = pd.to_datetime(df['Data'])
+  df['formatted_date'] = df['Data'].dt.strftime('%d/%m/%Y')
+
+  fig = px.bar(
+      df,
+      x='formatted_date',
+      y=y_axis_column,
+      title=f"{y_axis_column} por dia",  # Dynamic title
+      labels={'formatted_date': 'Dia', y_axis_column: y_axis_column}  # Axis labels
+  )
+
+  fig.update_xaxes(tickangle=-45)  # Rotate x-axis labels
+
+  return fig
