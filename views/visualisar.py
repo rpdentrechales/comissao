@@ -10,7 +10,7 @@ url_parameters = st.query_params
 error_page = False
 erro_message = "ID não encontrado"
 
-if "cache_reset" in st.session_state:
+if "reset_cache" in st.session_state:
   reset_cache = st.session_state["reset_cache"]
 else:
   reset_cache = 0
