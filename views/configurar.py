@@ -20,14 +20,17 @@ else:
   prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
   st.session_state["dados_prestadoras"] = prestadora_df
 
+prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://visualisar-comissao.streamlit.app/?id={x}")
+
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
-  column_order_prestadoras = ["nome_prestador","funcao_prestadora"]
+  column_order_prestadoras = ["nome_prestador","funcao_prestadora","url"]
   opcoes_funcoes = comissao_df["funcao_prestadora"].unique()
   column_config_prestadoras = {
       "nome_prestador": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
-      "funcao_prestadora": st.column_config.SelectboxColumn("Função da Prestadora",width="medium",options=opcoes_funcoes)
+      "funcao_prestadora": st.column_config.SelectboxColumn("Função da Prestadora",width="medium",options=opcoes_funcoes),
+      "url": st.column_config.LinkColumn("URL da Prestadora", display_text="Abrir URL")
   }
 
   editar_linhas = st.toggle("Deletar linhas",value=False)
@@ -49,7 +52,11 @@ if seletor_pagina == "Prestadoras":
 
     st.session_state["dados_prestadoras"] = edited_prestadora_df[column_order_prestadoras]
     st.write(edited_prestadora_df.columns)
-    result = sync_dataframe(collection_name="prestadores_db",database_name="relatorio_comissao", dataframe=edited_prestadora_df, unique_key="nome_prestador")
+    result = sync_dataframe(collection_name="prestadores_db",
+                            database_name="relatorio_comissao",
+                            dataframe=edited_prestadora_df,
+                            unique_key="nome_prestador")
+    
     st.success("Alterações salvas com sucesso!")
 
 if seletor_pagina == "Comissões":
@@ -79,5 +86,8 @@ if seletor_pagina == "Comissões":
 
     edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df["funcao_prestadora"].isna()]
     st.session_state["dados_comissao"] = edited_comissao_df[column_order_comissao]
-    result = sync_dataframe(collection_name="comissoes",database_name="relatorio_comissao", dataframe=edited_comissao_df, unique_key="funcao_prestadora")
+    result = sync_dataframe(collection_name="comissoes",
+                            database_name="relatorio_comissao",
+                            dataframe=edited_comissao_df,
+                            unique_key="funcao_prestadora")
     st.success("Alterações salvas com sucesso!")
