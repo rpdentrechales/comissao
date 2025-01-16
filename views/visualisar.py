@@ -10,13 +10,22 @@ url_parameters = st.query_params
 error_page = False
 erro_message = "ID não encontrado"
 
+if "cache_reset" in st.session_state:
+  cache_reset = st.session_state["cache_reset"]
+else:
+  cache_reset = 0
+  st.session_state["cache_reset"] = cache_reset
+
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
-  prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
+  prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db",
+                                             database_name="relatorio_comissao",
+                                             cache_reset = cache_reset)
+  
   prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
   if prestadora_df.empty:
-    
+
     error_page = True
     erro_message = "ID da prestadora não encontrado..."
 
@@ -26,11 +35,11 @@ if "id" in url_parameters:
 
   comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
   comissao_df = comissao_df.loc[comissao_df["funcao_prestadora"] == funcao_prestadora]
-  
+
   if comissao_df.empty:
-    
+
     error_page = True
-    erro_message = "Erro no cadastro da Pretadora.\nPor favor, atualize o cadastro."
+    erro_message = "Erro no cadastro da Prestadora...\nClick em recarregar.."
 
   else:
     comissao = comissao_df["comissao"].iloc[0]
@@ -38,6 +47,12 @@ if "id" in url_parameters:
   if error_page:
 
     st.title(erro_message)
+    recarregar = st.button("Recarregar")
+    
+    if recarregar:
+
+      cache_reset += 1
+      st.session_state["cache_reset"] = cache_reset
 
   else:
 
@@ -55,9 +70,9 @@ if "id" in url_parameters:
     filtered_atendimentos_df = atendimentos_df.loc[atendimentos_df["period"] == seletor_mes]
 
     groupby_dia = filtered_atendimentos_df.groupby(['Data']).agg({'ID agendamento': 'nunique', 'comissao': 'sum'}).reset_index()
-    
+
     metrica_mes_1,metrica_mes_2= st.columns(2)
-    
+
     with metrica_mes_1:
       atendimentos_totais = filtered_atendimentos_df["ID agendamento"].nunique()
       st.metric(label="Atendimentos Totais", value=atendimentos_totais)
@@ -76,5 +91,5 @@ if "id" in url_parameters:
     colunas = ["Data","ID agendamento","Procedimento","Unidade do agendamento"]
     resumo_df = filtered_atendimentos_df[colunas]
     resumo_df["Data"] = resumo_df["Data"].dt.strftime('%d/%m/%Y')
-    
+
     st.dataframe(resumo_df,hide_index=True,use_container_width=True)
