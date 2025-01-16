@@ -25,12 +25,13 @@ prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://v
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
-  column_order_prestadoras = ["nome_prestador","funcao_prestadora","url"]
+  column_order_prestadoras = ["nome_prestador","funcao_prestadora","url","id_prestador"]
   opcoes_funcoes = comissao_df["funcao_prestadora"].unique()
   column_config_prestadoras = {
       "nome_prestador": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
       "funcao_prestadora": st.column_config.SelectboxColumn("Função da Prestadora",width="medium",options=opcoes_funcoes),
-      "url": st.column_config.LinkColumn("URL da Prestadora", display_text="Abrir URL")
+      "url": st.column_config.LinkColumn("URL da Prestadora", display_text="Abrir URL"),
+      "id_prestador": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True)
   }
 
   editar_linhas = st.toggle("Deletar linhas",value=False)
@@ -51,12 +52,11 @@ if seletor_pagina == "Prestadoras":
   if st.button("Salvar alterações"):
 
     st.session_state["dados_prestadoras"] = edited_prestadora_df[column_order_prestadoras]
-    st.write(edited_prestadora_df.columns)
     result = sync_dataframe(collection_name="prestadores_db",
                             database_name="relatorio_comissao",
                             dataframe=edited_prestadora_df,
                             unique_key="nome_prestador")
-    
+
     st.success("Alterações salvas com sucesso!")
 
 if seletor_pagina == "Comissões":
