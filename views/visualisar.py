@@ -53,7 +53,10 @@ if "id" in url_parameters:
       comissao_graph = plot_bar_graph(groupby_dia, "comissao","Comissão por dia (R$)")
       st.plotly_chart(comissao_graph, use_container_width=True)
 
-    st.dataframe(filtered_atendimentos_df)
+    st.subheader("Detalhe diário:")
+    colunas = ["Data","ID agendamento","Procedimento","Unidade do agendamento"]
+    st.dataframe(filtered_atendimentos_df[colunas],hide_index=True,use_cotainer_width=True)
+
     error_page = False
 
 if error_page:
