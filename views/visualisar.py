@@ -41,7 +41,7 @@ if "id" in url_parameters:
     
     with metrica_mes_1:
       atendimentos_totais = filtered_atendimentos_df["ID agendamento"].nunique()
-      st.metric(label="Atendimentos Totais", value=f"atendimentos_totais")
+      st.metric(label="Atendimentos Totais", value=atendimentos_totais)
 
       atendimentos_graph = plot_bar_graph(groupby_dia, "ID agendamento","Agendamentos por dia")
       st.plotly_chart(atendimentos_graph, use_container_width=True)
