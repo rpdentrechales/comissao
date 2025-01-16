@@ -73,7 +73,7 @@ if seletor_pagina == "Comissões":
       "funcao_prestadora": st.column_config.TextColumn("Função da Prestadora",width="medium"),
       "comissao": st.column_config.NumberColumn("Comissão",width="medium",format="R$%.2f")
   }
-
+  comissao_df = comissao_df[column_order_comissao]
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
                                       hide_index=True,
