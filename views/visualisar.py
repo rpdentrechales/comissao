@@ -7,7 +7,7 @@ import plotly.express as px
 st.set_page_config(page_title="Pró-Corpo - Visualizar Comissões", page_icon="💎",layout="wide")
 
 url_parameters = st.query_params
-error_page = True
+error_page = False
 erro_message = "ID não encontrado"
 
 if "id" in url_parameters:
@@ -16,21 +16,31 @@ if "id" in url_parameters:
   prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
   prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
   if prestadora_df.empty:
+    
     error_page = True
     erro_message = "ID da prestadora não encontrado..."
+
   else:
     nome_prestadora = prestadora_df["nome_prestador"].iloc[0]
     funcao_prestadora = prestadora_df["funcao_prestadora"].iloc[0]
 
   comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
   comissao_df = comissao_df.loc[comissao_df["funcao_prestadora"] == funcao_prestadora]
+  
   if comissao_df.empty:
+    
     error_page = True
     erro_message = "Erro no cadastro da Pretadora.\nPor favor, atualize o cadastro."
+
   else:
     comissao = comissao_df["comissao"].iloc[0]
 
-  if nome_prestadora:
+  if error_page:
+
+    st.title(erro_message)
+
+  else:
+
     query = {"Prestador": nome_prestadora}
     atendimentos_df = get_dataframe_from_mongodb(collection_name="agendamentos_db", database_name="relatorio_comissao",query=query)
     atendimentos_df['Data'] = pd.to_datetime(atendimentos_df['Data'])
@@ -68,8 +78,3 @@ if "id" in url_parameters:
     resumo_df["Data"] = resumo_df["Data"].dt.strftime('%d/%m/%Y')
     
     st.dataframe(resumo_df,hide_index=True,use_container_width=True)
-
-    error_page = False
-
-if error_page:
-  st.title(erro_message)
