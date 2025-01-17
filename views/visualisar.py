@@ -58,7 +58,7 @@ if "id" in url_parameters:
 
     query = {"Prestador": nome_prestadora}
     atendimentos_df = get_dataframe_from_mongodb(collection_name="agendamentos_db", database_name="relatorio_comissao",query=query)
-    atendimentos_df['Data'] = pd.to_datetime(atendimentos_df['Data'])
+    atendimentos_df['Data'] = pd.to_datetime(atendimentos_df['Data'],format="%d/%m/%Y")
     atendimentos_df['period'] = atendimentos_df['Data'].dt.to_period('M')
     atendimentos_df["comissao"] = comissao
 
