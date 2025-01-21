@@ -6,7 +6,7 @@ from auxiliar.auxiliar import *
 st.set_page_config(page_title="Pró-Corpo - Configurações", page_icon="💎",layout="wide")
 
 st.title("Configurações")
-seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões"],selection_mode="single",default="Prestadoras")
+seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões","Tipo de prestadoras","Procedimentos"],selection_mode="single",default="Prestadoras")
 
 if "dados_comissao" in st.session_state:
   comissao_df = st.session_state["dados_comissao"]
@@ -19,6 +19,19 @@ if "dados_prestadoras" in st.session_state:
 else:
   prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
   st.session_state["dados_prestadoras"] = prestadora_df
+
+if "dados_procedimentos" in st.session_state:
+  procedimentos_df = st.session_state["dados_procedimentos"]
+else:
+  procedimentos_df = get_dataframe_from_mongodb(collection_name="procedimentos", database_name="relatorio_procedimentos")
+  st.session_state["dados_procedimentos"] = procedimentos_df
+
+if "dados_tipo_prestador" in st.session_state:
+  tipo_prestador_df = st.session_state["dados_tipo_prestador"]
+else:
+  tipo_prestador_df = get_dataframe_from_mongodb(collection_name="tipo_prestador", database_name="relatorio_comissao")
+  st.session_state["dados_tipo_prestador"] = tipo_prestador_df
+
 
 prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://visualisar-comissao.streamlit.app/?id={x}")
 
@@ -62,18 +75,18 @@ if seletor_pagina == "Prestadoras":
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
 
-  if "dados_comissao" in st.session_state:
-    comissao_df = st.session_state["dados_comissao"]
-  else:
-    comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
-    st.session_state["dados_comissao"] = comissao_df
+  column_order_comissao = ["Procedimento","Tipo de prestador","Valor"]
+  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
+  opcoes_procedimentos = procedimentos_df["procedimento"].unique()
 
-  column_order_comissao = ["funcao_prestadora","comissao"]
   column_config_comissao = {
-      "funcao_prestadora": st.column_config.TextColumn("Função da Prestadora",width="medium"),
-      "comissao": st.column_config.NumberColumn("Comissão",width="medium",format="R$%.2f")
+      "Tipo de prestador": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestador),
+      "Procedimento": st.column_config.SelectboxColumn("Procedimento",width="medium",options=opcoes_tipo_prestador),
+      "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
   }
+  
   comissao_df = comissao_df[column_order_comissao]
+
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
                                       hide_index=True,
