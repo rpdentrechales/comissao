@@ -78,6 +78,8 @@ if seletor_pagina == "Comissões":
 
   column_order_comissao = ["Procedimento","Tipo de prestador","Valor"]
   opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
+  st.dataframe(procedimentos_df)
+  
   opcoes_procedimentos = procedimentos_df["procedimento"].unique()
 
   column_config_comissao = {
