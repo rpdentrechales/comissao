@@ -39,10 +39,11 @@ if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
   column_order_prestadoras = ["nome_prestador","funcao_prestadora","url","id_prestador"]
-  opcoes_funcoes = comissao_df["funcao_prestadora"].unique()
+  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
+  
   column_config_prestadoras = {
       "nome_prestador": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
-      "funcao_prestadora": st.column_config.SelectboxColumn("Função da Prestadora",width="medium",options=opcoes_funcoes),
+      "funcao_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestador),
       "url": st.column_config.LinkColumn("URL da Prestadora", display_text="Abrir URL"),
       "id_prestador": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True)
   }
@@ -84,7 +85,7 @@ if seletor_pagina == "Comissões":
       "Procedimento": st.column_config.SelectboxColumn("Procedimento",width="medium",options=opcoes_tipo_prestador),
       "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
   }
-  
+
   comissao_df = comissao_df[column_order_comissao]
 
   edited_comissao_df = st.data_editor(comissao_df,
