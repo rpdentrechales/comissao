@@ -23,7 +23,7 @@ else:
 if "dados_procedimentos" in st.session_state:
   procedimentos_df = st.session_state["dados_procedimentos"]
 else:
-  procedimentos_df = get_dataframe_from_mongodb(collection_name="procedimentos", database_name="relatorio_procedimentos")
+  procedimentos_df = get_dataframe_from_mongodb(collection_name="procedimentos", database_name="relatorio_comissao")
   st.session_state["dados_procedimentos"] = procedimentos_df
 
 if "dados_tipo_prestador" in st.session_state:
@@ -78,8 +78,6 @@ if seletor_pagina == "Comissões":
 
   column_order_comissao = ["Procedimento","Tipo de prestador","Valor"]
   opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
-  st.dataframe(procedimentos_df)
-  
   opcoes_procedimentos = procedimentos_df["procedimento"].unique()
 
   column_config_comissao = {
