@@ -100,8 +100,44 @@ if seletor_pagina == "Comissões":
 
     edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df["funcao_prestadora"].isna()]
     st.session_state["dados_comissao"] = edited_comissao_df[column_order_comissao]
+    
     result = sync_dataframe(collection_name="comissoes",
                             database_name="relatorio_comissao",
                             dataframe=edited_comissao_df,
                             unique_key="funcao_prestadora")
+    
+    st.success("Alterações salvas com sucesso!")
+
+if seletor_pagina == "Tipo de prestadoras":
+
+  st.subheader("Configurar Tipo de prestadoras")
+
+  column_order_tipo_prestador = ["tipo_prestador"]
+  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
+
+  column_config_tipo_prestador = {
+      "tipo_prestador": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestador)
+  }
+
+  tipo_prestador_df = tipo_prestador_df[column_order_tipo_prestador]
+
+  edited_tipo_prestador_df = st.data_editor(tipo_prestador_df,
+                                      use_container_width=False,
+                                      hide_index=True,
+                                      column_order=column_order_tipo_prestador,
+                                      column_config=column_config_comissao,
+                                      num_rows="dynamic"
+                                      )
+
+  if st.button("Salvar alterações"):
+
+    edited_tipo_prestador_df = edited_tipo_prestador_df.loc[~edited_tipo_prestador_df["tipo_prestador"].isna()]
+    edited_tipo_prestador_df = edited_tipo_prestador_df[column_order_tipo_prestador]
+    st.session_state["dados_tipo_prestador"] = edited_tipo_prestador_df[column_order_tipo_prestador]
+    
+    result = sync_dataframe(collection_name="tipo_prestador",
+                            database_name="relatorio_comissao",
+                            dataframe=edited_tipo_prestador_df,
+                            unique_key="funcao_prestadora")
+    
     st.success("Alterações salvas com sucesso!")
