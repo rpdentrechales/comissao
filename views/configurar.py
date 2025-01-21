@@ -69,7 +69,7 @@ if seletor_pagina == "Prestadoras":
     result = sync_dataframe(collection_name="prestadores_db",
                             database_name="relatorio_comissao",
                             dataframe=edited_prestadora_df,
-                            unique_key="nome_prestador")
+                            unique_key=["nome_prestador"])
 
     st.success("Alterações salvas com sucesso!")
 
@@ -98,13 +98,13 @@ if seletor_pagina == "Comissões":
 
   if st.button("Salvar alterações"):
 
-    edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df["funcao_prestadora"].isna()]
+    edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df[["Procedimento","Tipo de prestador"]].isna().any(axis=1)]
     st.session_state["dados_comissao"] = edited_comissao_df[column_order_comissao]
     
     result = sync_dataframe(collection_name="comissoes",
                             database_name="relatorio_comissao",
                             dataframe=edited_comissao_df,
-                            unique_key="funcao_prestadora")
+                            unique_key=["Procedimento","Tipo de prestador"])
     
     st.success("Alterações salvas com sucesso!")
 
@@ -113,10 +113,9 @@ if seletor_pagina == "Tipo de prestadoras":
   st.subheader("Configurar Tipo de prestadoras")
 
   column_order_tipo_prestador = ["tipo_prestador"]
-  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
 
   column_config_tipo_prestador = {
-      "tipo_prestador": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestador)
+      "tipo_prestador": st.column_config.TextColumn("Tipo de prestador",width="medium")
   }
 
   tipo_prestador_df = tipo_prestador_df[column_order_tipo_prestador]
@@ -138,6 +137,25 @@ if seletor_pagina == "Tipo de prestadoras":
     result = sync_dataframe(collection_name="tipo_prestador",
                             database_name="relatorio_comissao",
                             dataframe=edited_tipo_prestador_df,
-                            unique_key="funcao_prestadora")
+                            unique_key=["funcao_prestadora"])
     
     st.success("Alterações salvas com sucesso!")
+
+if seletor_pagina == "Procedimentos":
+
+  st.subheader("Configurar Procedimentos")
+
+  column_order_procedimento = ["procedimento"]
+
+  column_config_procedimento = {
+      "tipo_prestador": st.column_config.TextColumn("Tipo de prestador",width="medium")
+  }
+
+  procedimentos_df = procedimentos_df[column_order_tipo_prestador]
+
+  st.dataframe(procedimentos_df,
+               use_container_width=False,
+               hide_index=True,
+               column_order=column_order_procedimento,
+               column_config=column_config_procedimento
+               )
