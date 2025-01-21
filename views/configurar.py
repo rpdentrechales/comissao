@@ -125,7 +125,7 @@ if seletor_pagina == "Tipo de prestadoras":
                                       use_container_width=False,
                                       hide_index=True,
                                       column_order=column_order_tipo_prestador,
-                                      column_config=column_config_comissao,
+                                      column_config=column_config_tipo_prestador,
                                       num_rows="dynamic"
                                       )
 
@@ -134,7 +134,7 @@ if seletor_pagina == "Tipo de prestadoras":
     edited_tipo_prestador_df = edited_tipo_prestador_df.loc[~edited_tipo_prestador_df["tipo_prestador"].isna()]
     edited_tipo_prestador_df = edited_tipo_prestador_df[column_order_tipo_prestador]
     st.session_state["dados_tipo_prestador"] = edited_tipo_prestador_df[column_order_tipo_prestador]
-    
+
     result = sync_dataframe(collection_name="tipo_prestador",
                             database_name="relatorio_comissao",
                             dataframe=edited_tipo_prestador_df,
