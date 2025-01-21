@@ -151,7 +151,7 @@ if seletor_pagina == "Procedimentos":
       "tipo_prestador": st.column_config.TextColumn("Tipo de prestador",width="medium")
   }
 
-  procedimentos_df = procedimentos_df[column_order_tipo_prestador]
+  procedimentos_df = procedimentos_df[column_order_procedimento]
 
   st.dataframe(procedimentos_df,
                use_container_width=False,
