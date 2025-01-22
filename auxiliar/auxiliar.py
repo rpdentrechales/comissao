@@ -58,9 +58,6 @@ def convert_name_to_id(name):
   id = hashlib.md5(name.encode()).hexdigest()[:12]
   return id
 
-import pandas as pd
-from pymongo import MongoClient, UpdateOne
-
 def sync_dataframe(collection_name, database_name, dataframe, unique_key):
   print(f"Syncing data to {database_name} : {collection_name}")
 
@@ -101,9 +98,6 @@ def sync_dataframe(collection_name, database_name, dataframe, unique_key):
   print(f"Sync results: {database_name} : {collection_name} - {results}")
 
   return results
-
-import plotly.express as px
-import pandas as pd
 
 def plot_bar_graph(df, y_axis_column,title):
 
