@@ -58,46 +58,36 @@ def convert_name_to_id(name):
   id = hashlib.md5(name.encode()).hexdigest()[:12]
   return id
 
-def sync_dataframe(collection_name, database_name, dataframe, unique_key):
-  print(f"Syncing data to {database_name} : {collection_name}")
+def sync_dataframe(collection_name, database_name, dataframe, unique_keys):
 
-  client = MongoClient(f"mongodb+srv://rpdprocorpo:iyiawsSCfCsuAzOb@cluster0.lu6ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-  db = client[database_name]
-  collection = db[collection_name]
+    print(f"Uploading data to {database_name} : {collection_name}")
+    client = MongoClient(f"mongodb+srv://rpdprocorpo:iyiawsSCfCsuAzOb@cluster0.lu6ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+    db = client[database_name]
+    collection = db[collection_name]
 
-  # Get existing collection data
-  existing_data = pd.DataFrame(list(collection.find()))
-  if '_id' in existing_data.columns:
-      existing_data = existing_data.drop(columns=['_id'])
+    bulk_operations = []
 
-  # Find rows to delete
-  rows_to_delete = existing_data[~existing_data[unique_key].isin(dataframe[unique_key])][unique_key].tolist()
+    for _, row in dataframe.iterrows():
+        item = row.to_dict()
+        # Create a composite query using the unique keys
+        query = {key: item[key] for key in unique_keys}
+        update = {"$set": item}
+        bulk_operations.append(UpdateOne(query, update, upsert=True))
 
-  # Delete rows not in DataFrame
-  if rows_to_delete:
-      collection.delete_many({unique_key: {"$in": rows_to_delete}})
+    if bulk_operations:
+        result = collection.bulk_write(bulk_operations)
+        results = {
+            "inserted": result.upserted_count,
+            "updated": result.modified_count,
+            "matched": result.matched_count,
+        }
+    else:
+        results = {"inserted": 0, "updated": 0, "matched": 0}
 
-  # Update/Insert DataFrame rows
-  bulk_operations = []
-  for _, row in dataframe.iterrows():
-      item = row.to_dict()
-      query = {unique_key: item[unique_key]}
-      update = {"$set": item}
-      bulk_operations.append(UpdateOne(query, update, upsert=True))
+    print(f"Upload results: {database_name} : {collection_name} - {results}")
 
-  if bulk_operations:
-      result = collection.bulk_write(bulk_operations)
-      results = {
-        "inserted": result.upserted_count,
-        "updated": result.modified_count,
-        "matched": result.matched_count,
-    }
-  else:
-      results = {"inserted": 0, "updated": 0, "matched": 0}
+    return results
 
-  print(f"Sync results: {database_name} : {collection_name} - {results}")
-
-  return results
 
 def plot_bar_graph(df, y_axis_column,title):
 
