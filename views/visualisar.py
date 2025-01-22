@@ -119,11 +119,18 @@ if "id" in url_parameters:
     procedimentos_sem_valor = merged_data_df.loc[merged_data_df["Valor"].isnull(),["Procedimento","Tipo de prestador","Valor"]].drop_duplicates()
     procedimentos_sem_valor["Tipo de prestador"] = funcao_prestadora
 
-    st.dataframe(procedimentos_sem_valor)
+    quantidade_de_procedimentos_sem_valor = procedimentos_sem_valor.shape[0]
 
-    # result = sync_dataframe(collection_name="comissoes",
-    #                         database_name="relatorio_comissao",
-    #                         dataframe=procedimentos_sem_valor,
-    #                         unique_key=["Procedimento","Tipo de prestador"])
+    if quantidade_de_procedimentos_sem_valor > 0:
+      st.write(f"Foram encontrados {quantidade_de_procedimentos_sem_valor} procedimentos sem valor cadastrado")
+
+      subir_procedimentos = st.button("Informar procedimentos sem valar cadastrado")
+
+      if subir_procedimentos:
+        result = sync_dataframe(collection_name="comissoes",
+                                database_name="relatorio_comissao",
+                                dataframe=procedimentos_sem_valor,
+                                unique_key=["Procedimento","Tipo de prestador"])
     
-    st.success("Alterações salvas com sucesso!")
+        st.success("Procedimentos informados com sucesso!")
+        st.write("Dentro de alguns dias o valor será atualizado no sistema")
