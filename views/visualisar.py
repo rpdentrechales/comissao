@@ -77,10 +77,10 @@ if "id" in url_parameters:
 
     st.title(f"Comissões - {nome_prestadora}")
 
-    meses = sorted(atendimentos_df["period"].unique(),reverse=True)
+    meses = sorted(merged_data_df["period"].unique(),reverse=True)
 
     seletor_mes = st.selectbox("Selecione um mês", meses)
-    filtered_atendimentos_df = atendimentos_df.loc[atendimentos_df["period"] == seletor_mes]
+    filtered_atendimentos_df = merged_data_df.loc[merged_data_df["period"] == seletor_mes]
 
     groupby_dia = filtered_atendimentos_df.groupby(['Data']).agg({'ID agendamento': 'nunique', 'Valor': 'sum'}).reset_index()
 
