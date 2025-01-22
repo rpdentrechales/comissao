@@ -69,13 +69,12 @@ if "id" in url_parameters:
                                                 query=query_prestador
                                                 )
     
-    st.write(nome_prestadora)
-
     atendimentos_df['Data'] = pd.to_datetime(atendimentos_df['Data'],format="%d/%m/%Y")
     atendimentos_df['period'] = atendimentos_df['Data'].dt.to_period('M')
     merged_data_df = pd.merge(atendimentos_df,comissao_df,how="left",left_on="Procedimento",right_on="Procedimento")
 
-    st.title(f"Comissões - {nome_prestadora}")
+    st.title("Comissões:")
+    st.subheader(nome_prestadora)
 
     meses = sorted(merged_data_df["period"].unique(),reverse=True)
 
@@ -101,8 +100,18 @@ if "id" in url_parameters:
       st.plotly_chart(comissao_graph, use_container_width=True)
 
     st.subheader("Detalhe diário:")
-    colunas = ["Data","ID agendamento","Procedimento","Unidade do agendamento"]
+    colunas = ["Data","ID agendamento","Procedimento","Unidade do agendamento","Valor"]
     resumo_df = filtered_atendimentos_df[colunas]
     resumo_df["Data"] = resumo_df["Data"].dt.strftime('%d/%m/%Y')
 
-    st.dataframe(resumo_df,hide_index=True,use_container_width=True)
+    column_config_comissao = {
+      "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
+    }
+
+    st.dataframe(
+                resumo_df,
+                hide_index=True,
+                use_container_width=True,
+                column_order=colunas,
+                column_config=column_config_comissao
+                )
