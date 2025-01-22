@@ -12,3 +12,4 @@ Relatório de Comissão
 ## Atualizações realizadas:
 1. Criar área para cadastrar valor do procedimento por função
 2. Ajustar visualização para que considere o valor do procedimento e do tipo de prestador
+3. Criar sistema para reportar procedimentos sem valor na área de visualização

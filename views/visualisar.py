@@ -115,3 +115,14 @@ if "id" in url_parameters:
                 column_order=colunas,
                 column_config=column_config_comissao
                 )
+
+    procedimentos_sem_valor = merged_data_df.loc[merged_data_df["Valor"].isnull(),["Procedimento","Tipo de prestador","Valor"]].drop_duplicates()
+
+    st.dataframe(procedimentos_sem_valor)
+
+    result = sync_dataframe(collection_name="comissoes",
+                            database_name="relatorio_comissao",
+                            dataframe=procedimentos_sem_valor,
+                            unique_key=["Procedimento","Tipo de prestador"])
+    
+    st.success("Alterações salvas com sucesso!")
