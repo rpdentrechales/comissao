@@ -66,10 +66,10 @@ if seletor_pagina == "Prestadoras":
   if st.button("Salvar alterações"):
 
     st.session_state["dados_prestadoras"] = edited_prestadora_df[column_order_prestadoras]
-    result = sync_dataframe(collection_name="prestadores_db",
+    result = upload_dataframe_to_mongodb(collection_name="prestadores_db",
                             database_name="relatorio_comissao",
                             dataframe=edited_prestadora_df,
-                            unique_key=["nome_prestador"])
+                            unique_keys=["nome_prestador"])
 
     st.success("Alterações salvas com sucesso!")
 
@@ -101,10 +101,10 @@ if seletor_pagina == "Comissões":
     edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df[["Procedimento","Tipo de prestador"]].isna().any(axis=1)]
     st.session_state["dados_comissao"] = edited_comissao_df[column_order_comissao]
     
-    result = sync_dataframe(collection_name="comissoes",
+    result = upload_dataframe_to_mongodb(collection_name="comissoes",
                             database_name="relatorio_comissao",
                             dataframe=edited_comissao_df,
-                            unique_key=["Procedimento","Tipo de prestador"])
+                            unique_keys=["Procedimento","Tipo de prestador"])
     
     st.success("Alterações salvas com sucesso!")
 
@@ -134,10 +134,10 @@ if seletor_pagina == "Tipo de prestadoras":
     edited_tipo_prestador_df = edited_tipo_prestador_df[column_order_tipo_prestador]
     st.session_state["dados_tipo_prestador"] = edited_tipo_prestador_df[column_order_tipo_prestador]
 
-    result = sync_dataframe(collection_name="tipo_prestador",
+    result = upload_dataframe_to_mongodb(collection_name="tipo_prestador",
                             database_name="relatorio_comissao",
                             dataframe=edited_tipo_prestador_df,
-                            unique_key=["funcao_prestadora"])
+                            unique_keys=["funcao_prestadora"])
     
     st.success("Alterações salvas com sucesso!")
 

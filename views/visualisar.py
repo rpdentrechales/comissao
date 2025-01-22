@@ -127,7 +127,7 @@ if "id" in url_parameters:
       subir_procedimentos = st.button("Informar procedimentos sem valar cadastrado")
 
       if subir_procedimentos:
-        result = sync_dataframe(collection_name="comissoes",
+        result = upload_dataframe_to_mongodb(collection_name="comissoes",
                                 database_name="relatorio_comissao",
                                 dataframe=procedimentos_sem_valor,
                                 unique_key=["Procedimento","Tipo de prestador"])
