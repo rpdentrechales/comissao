@@ -6,18 +6,20 @@ configurar_page = st.Page(
     title="Configurações",
     icon=":material/settings:"
 )
-# configurar_page = st.Page(
-#     "views/configurar_vendedoras.py",
-#     title="Configurar Vendedoras",
-#     icon=":material/manufacturing:",
-#     default=True
-# )
+
+extrato_page = st.Page(
+    "views/extrato.py",
+    title="Extrato",
+    icon=":material/payments:",
+    default=True
+)
 
 # --- NAVIGATION SETUP [WITH SECTIONS]---
 pg = st.navigation(
     {
+        "Extratos": [extrato_page],
         "Configurar": [configurar_page],
-        # "Testes": [configurar_page]
+        
     }
 )
 
