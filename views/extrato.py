@@ -17,6 +17,6 @@ extrato_df = get_dataframe_from_mongodb(collection_name="extrato_prestadoras", d
 
 prestadores_df = prestadores_df[["nome_prestador","funcao_prestadora"]]
 
-merged_df = pd.merge(extrato_df,prestadoras,how="left",left_on="Prestador",right_on="nome_prestador")
+merged_df = pd.merge(extrato_df,prestadores_df,how="left",left_on="Prestador",right_on="nome_prestador")
 
 st.dataframe(merged_df)
