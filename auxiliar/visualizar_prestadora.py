@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from auxiliar.auxiliar import *
 import plotly.express as px
 
+@st.cache_data
 def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
   
   if "reset_cache" in st.session_state:

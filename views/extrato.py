@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 from auxiliar.auxiliar import *
+from auxiliar.visualizar_prestadora import *
 
 st.set_page_config(page_title="Pró-Corpo - Extratos", page_icon="💎",layout="wide")
 
@@ -53,4 +54,12 @@ if seletor_pagina == "Geral":
 
 if seletor_pagina == "Por Prestador":
 
-    st.dataframe(merged_df)
+    nomes_prestador = merged_df["nome_prestador"].unique()
+
+    seletor_nome = st.selectbox(
+    "Selecione uma Prestadora",
+    nomes_prestador
+    )
+    
+    if seletor_nome:
+        visualizar_prestadora(nome_prestadora=seletor_nome)
