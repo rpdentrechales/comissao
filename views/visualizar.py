@@ -12,7 +12,8 @@ url_parameters = st.query_params
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
-  
+
+  st.title("Comissões:")
   visualizar_prestadora(id_prestadora=id_prestadora)
 
 else:

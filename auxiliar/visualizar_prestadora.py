@@ -76,8 +76,7 @@ def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
     atendimentos_df['Data'] = pd.to_datetime(atendimentos_df['Data'],format="%d/%m/%Y")
     atendimentos_df['period'] = atendimentos_df['Data'].dt.to_period('M')
     merged_data_df = pd.merge(atendimentos_df,comissao_df,how="left",left_on="Procedimento",right_on="Procedimento")
-
-    st.title("Comissões:")
+    
     st.subheader(nome_prestadora)
 
     meses = sorted(merged_data_df["period"].unique(),reverse=True)
