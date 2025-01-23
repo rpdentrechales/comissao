@@ -20,4 +20,9 @@ prestadores_df = prestadores_df[["nome_prestador","funcao_prestadora"]]
 merged_df = pd.merge(extrato_df,prestadores_df,how="left",left_on="Prestador",right_on="nome_prestador")
 merged_df = pd.merge(merged_df,comissao_df,how="left",left_on=["Procedimento","funcao_prestadora"],right_on=["Procedimento","Tipo de prestador"])
 
-st.dataframe(merged_df)
+merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
+
+merged_df = merged_df.loc[~merged_df["Valor"].isna()]
+groupby_mes = merged_df.groupby(["nome_prestador","Tipo de Prestador","periodo"]).agg({"valor_total":"sum"})
+
+st.dataframe(groupby_mes)
