@@ -6,6 +6,12 @@ import plotly.express as px
 
 def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
   
+  if "reset_cache" in st.session_state:
+    reset_cache = st.session_state["reset_cache"]
+  else:
+    reset_cache = 0
+    st.session_state["reset_cache"] = reset_cache
+
   error_page = False
   erro_message = "ID não encontrado"
 
