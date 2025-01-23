@@ -134,7 +134,7 @@ if "id" in url_parameters:
 
         result_procedimento = upload_dataframe_to_mongodb(collection_name="procedimentos",
                                 database_name="relatorio_comissao",
-                                dataframe=procedimentos_sem_valor["Procedimento"],
+                                dataframe=procedimentos_sem_valor["Procedimento"].unique(),
                                 unique_keys=["Procedimento"])
     
         st.success("Procedimentos informados com sucesso!")
