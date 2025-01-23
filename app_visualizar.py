@@ -6,18 +6,11 @@ visualizar_page = st.Page(
     title="Visualizar Comissões",
     icon=":material/payments:"
 )
-# configurar_page = st.Page(
-#     "views/configurar_vendedoras.py",
-#     title="Configurar Vendedoras",
-#     icon=":material/manufacturing:",
-#     default=True
-# )
 
 # --- NAVIGATION SETUP [WITH SECTIONS]---
 pg = st.navigation(
     {
         "Visualizar": [visualizar_page],
-        # "Testes": [configurar_page]
     }
 )
 
