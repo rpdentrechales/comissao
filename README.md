@@ -8,6 +8,8 @@ Relatório de Comissão
 4. Prévia/Realtime
 5. Ajustar funções do MongoDB para utilizar recursos nativos do Streamlit.
 6. Adicionar logo e outros elementos gráficos
+7. Arrumar botão "Informar procedimentos" na página de visualização
+8. Ordenar comissões para que procedimentos sem valor apareçam no inicio da tabela
 
 ## Atualizações realizadas:
 1. Criar área para cadastrar valor do procedimento por função
