@@ -110,7 +110,8 @@ if "id" in url_parameters:
     resumo_df["Data"] = resumo_df["Data"].dt.strftime('%d/%m/%Y')
 
     column_config_comissao = {
-      "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
+      "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f"),
+      "ID agendamento": st.column_config.TextColumn("ID agendamento",width="medium")
     }
 
     st.dataframe(
@@ -129,7 +130,7 @@ if "id" in url_parameters:
     if quantidade_de_procedimentos_sem_valor > 0:
       st.write(f"Foram encontrados {quantidade_de_procedimentos_sem_valor} procedimentos sem valor cadastrado")
 
-      subir_procedimentos = st.button("Informar procedimentos sem valar cadastrado")
+      subir_procedimentos = st.button("Informar procedimentos sem valor cadastrado")
 
       if subir_procedimentos:
         result_comissao = upload_dataframe_to_mongodb(collection_name="comissoes",
@@ -144,3 +145,30 @@ if "id" in url_parameters:
     
         st.success("Procedimentos informados com sucesso!")
         st.write("Dentro de alguns dias o valor será atualizado no sistema")
+
+
+st.title("testes")
+
+comissao_df = get_dataframe_from_mongodb(collection_name="comissoes",database_name="relatorio_comissao")
+
+prestadores_df = get_dataframe_from_mongodb(collection_name="prestadores_db",
+                                            database_name="relatorio_comissao",
+                                            query = { "funcao_prestadora": { "$ne": None } })
+
+prestadoras = prestadores_df["nome_prestador"].unique()
+extrato_df = get_dataframe_from_mongodb(collection_name="extrato_prestadoras",
+                                        database_name="relatorio_comissao",
+                                        query = { "Prestador": { "$in": list(prestadoras) }})
+
+prestadores_df = prestadores_df[["nome_prestador","funcao_prestadora"]]
+
+merged_df = pd.merge(extrato_df,prestadores_df,how="left",left_on="Prestador",right_on="nome_prestador")
+merged_df = pd.merge(merged_df,comissao_df,
+                     how="left",
+                     left_on=["Procedimento","funcao_prestadora"],
+                     right_on=["Procedimento","Tipo de prestador"])
+
+merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
+merged_df = merged_df.loc[~merged_df["Valor"].isna()]
+
+st.dataframe(merged_df)
