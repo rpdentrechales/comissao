@@ -171,4 +171,7 @@ merged_df = pd.merge(merged_df,comissao_df,
 merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
 merged_df = merged_df.loc[~merged_df["Valor"].isna()]
 
-st.dataframe(merged_df)
+teste_df = merged_df.loc[merged_df["Prestador"] == "Bárbara Raquel de Góes Silva"]
+st.dataframe(teste_df)
+
+st.write(f"shape: {teste_df.shape}")
