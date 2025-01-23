@@ -33,7 +33,7 @@ else:
   st.session_state["dados_tipo_prestador"] = tipo_prestador_df
 
 
-prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://visualisar-comissao.streamlit.app/?id={x}")
+prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://visualizar-comissao.streamlit.app/?id={x}")
 
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
