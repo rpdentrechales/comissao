@@ -25,5 +25,5 @@ merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
 merged_df = merged_df.loc[~merged_df["Valor"].isna()]
 
 groupby_mes = merged_df.groupby(["nome_prestador","Tipo de prestador","periodo"]).agg({"valor_total":"sum"})
-
-st.dataframe(groupby_mes)
+pivot = pd.pivot_table(groupby_mes,values='valor_total',index=["nome_prestador","Tipo de prestador"],columns=["periodo"])
+st.dataframe(pivot)
