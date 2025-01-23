@@ -9,12 +9,6 @@ st.set_page_config(page_title="Pró-Corpo - Visualizar Comissões", page_icon="�
 
 url_parameters = st.query_params
 
-if "reset_cache" in st.session_state:
-  reset_cache = st.session_state["reset_cache"]
-else:
-  reset_cache = 0
-  st.session_state["reset_cache"] = reset_cache
-
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
