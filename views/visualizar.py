@@ -20,3 +20,7 @@ if "id" in url_parameters:
   id_prestadora = st.query_params["id"]
   
   visualizar_prestadora(id_prestadora=id_prestadora)
+
+else:
+  
+  st.write("Página não encontrada!")
