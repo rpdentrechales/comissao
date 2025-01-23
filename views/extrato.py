@@ -40,7 +40,7 @@ column_config={
         "nome_prestador": "Prestador",
         "Tipo de prestador": "Tipo de Prestador",
         **{col: {"label": col, "format": "R${:,.2f}"} for col in pivot.columns},
-    },
+    }
 
 
 st.dataframe(
