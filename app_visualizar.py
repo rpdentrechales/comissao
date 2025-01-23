@@ -2,7 +2,7 @@ import streamlit as st
 
 # --- PAGE SETUP ---
 visualizar_page = st.Page(
-    "views/visualizar.py",
+    "views/extrato.py",
     title="Visualizar Comissões",
     icon=":material/payments:"
 )

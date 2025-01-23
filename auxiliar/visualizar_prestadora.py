@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from auxiliar.auxiliar import *
 import plotly.express as px
 
-def visualisar_prestadora(id_prestadora=None,nome_prestadora=None):
+def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
   
   error_page = False
   erro_message = "ID não encontrado"

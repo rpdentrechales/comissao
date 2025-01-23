@@ -19,4 +19,4 @@ if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
   
-  visualisar_prestadora(id_prestadora=id_prestadora)
+  visualizar_prestadora(id_prestadora=id_prestadora)
