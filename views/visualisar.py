@@ -175,3 +175,4 @@ teste_df = merged_df.loc[merged_df["Prestador"] == "Bárbara Raquel de Góes Sil
 st.dataframe(teste_df)
 
 st.write(f"quantidade: {teste_df["quantidade"].sum()}")
+st.write(f"valor: {teste_df["valor_total"].sum()}")
