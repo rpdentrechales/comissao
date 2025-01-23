@@ -4,29 +4,25 @@ from datetime import datetime, timedelta
 from auxiliar.auxiliar import *
 import plotly.express as px
 
-st.set_page_config(page_title="Pró-Corpo - Visualizar Comissões", page_icon="💎",layout="wide")
-
-url_parameters = st.query_params
-error_page = False
-erro_message = "ID não encontrado"
-
-if "reset_cache" in st.session_state:
-  reset_cache = st.session_state["reset_cache"]
-else:
-  reset_cache = 0
-  st.session_state["reset_cache"] = reset_cache
-
-if "id" in url_parameters:
-
-  id_prestadora = st.query_params["id"]
-
-  query_id_prestadora = {"id_prestador": id_prestadora}
-  prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db",
-                                             database_name="relatorio_comissao",
-                                             reset_cache = reset_cache,
-                                             query=query_id_prestadora)
+def visualisar_prestadora(id_prestadora=None,nome_prestadora=None):
   
+  error_page = False
+  erro_message = "ID não encontrado"
+
+  if id_prestadora:
+
+    query_prestadora = {"id_prestador": id_prestadora}
+
+  elif nome_prestadora:
+    query_prestadora = {"nome_prestador": nome_prestadora}
+    
+  prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db",
+                                            database_name="relatorio_comissao",
+                                            reset_cache = reset_cache,
+                                            query=query_prestadora)
+
   prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
+
 
   if prestadora_df.empty:
 
@@ -145,34 +141,3 @@ if "id" in url_parameters:
     
         st.success("Procedimentos informados com sucesso!")
         st.write("Dentro de alguns dias o valor será atualizado no sistema")
-
-
-st.title("testes")
-
-comissao_df = get_dataframe_from_mongodb(collection_name="comissoes",database_name="relatorio_comissao")
-
-prestadores_df = get_dataframe_from_mongodb(collection_name="prestadores_db",
-                                            database_name="relatorio_comissao",
-                                            query = { "funcao_prestadora": { "$ne": None } })
-
-prestadoras = prestadores_df["nome_prestador"].unique()
-extrato_df = get_dataframe_from_mongodb(collection_name="extrato_prestadoras",
-                                        database_name="relatorio_comissao",
-                                        query = { "Prestador": { "$in": list(prestadoras) }})
-
-prestadores_df = prestadores_df[["nome_prestador","funcao_prestadora"]]
-
-merged_df = pd.merge(extrato_df,prestadores_df,how="left",left_on="Prestador",right_on="nome_prestador")
-merged_df = pd.merge(merged_df,comissao_df,
-                     how="left",
-                     left_on=["Procedimento","funcao_prestadora"],
-                     right_on=["Procedimento","Tipo de prestador"])
-
-merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
-merged_df = merged_df.loc[~merged_df["Valor"].isna()]
-
-teste_df = merged_df.loc[merged_df["Prestador"] == "Bárbara Raquel de Góes Silva"]
-st.dataframe(teste_df)
-
-st.write(f"quantidade: {teste_df["quantidade"].sum()}")
-st.write(f"valor: {teste_df["valor_total"].sum()}")
