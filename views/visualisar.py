@@ -174,4 +174,4 @@ merged_df = merged_df.loc[~merged_df["Valor"].isna()]
 teste_df = merged_df.loc[merged_df["Prestador"] == "Bárbara Raquel de Góes Silva"]
 st.dataframe(teste_df)
 
-st.write(f"shape: {teste_df.shape}")
+st.write(f"quantidade: {teste_df["quantidade"].sum()}")
