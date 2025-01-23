@@ -32,9 +32,9 @@ else:
   tipo_prestador_df = get_dataframe_from_mongodb(collection_name="tipo_prestador", database_name="relatorio_comissao")
   st.session_state["dados_tipo_prestador"] = tipo_prestador_df
 
-
 prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://visualizar-comissao.streamlit.app/?id={x}")
 
+st.dataframe(prestadora_df["url"])
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
