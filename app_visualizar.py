@@ -2,8 +2,8 @@ import streamlit as st
 
 # --- PAGE SETUP ---
 visualizar_page = st.Page(
-    "views/visualisar.py",
-    title="Visualisar",
+    "views/visualizar.py",
+    title="Visualizar",
     icon=":material/payments:"
 )
 # configurar_page = st.Page(
@@ -16,7 +16,7 @@ visualizar_page = st.Page(
 # --- NAVIGATION SETUP [WITH SECTIONS]---
 pg = st.navigation(
     {
-        "Visualisar": [visualizar_page],
+        "Visualizar": [visualizar_page],
         # "Testes": [configurar_page]
     }
 )
