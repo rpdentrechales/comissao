@@ -22,5 +22,5 @@ if "id" in url_parameters:
   visualizar_prestadora(id_prestadora=id_prestadora)
 
 else:
-  
-  st.write("Página não encontrada!")
+
+  st.title("Página não encontrada!")
