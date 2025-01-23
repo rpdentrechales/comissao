@@ -25,5 +25,27 @@ merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
 merged_df = merged_df.loc[~merged_df["Valor"].isna()]
 
 groupby_mes = merged_df.groupby(["nome_prestador","Tipo de prestador","periodo"]).agg({"valor_total":"sum"})
-pivot = pd.pivot_table(groupby_mes,values='valor_total',index=["nome_prestador","Tipo de prestador"],columns=["periodo"])
-st.dataframe(pivot)
+
+pivot = pd.pivot_table(
+    groupby_mes,
+    values="valor_total",
+    index=["nome_prestador", "Tipo de prestador"],
+    columns=["periodo"],
+    aggfunc="sum",
+)
+
+pivot_reset = pivot.reset_index()
+
+column_config={
+        "nome_prestador": "Prestador",
+        "Tipo de prestador": "Tipo de Prestador",
+        **{col: {"label": col, "format": "R${:,.2f}"} for col in pivot.columns},
+    },
+
+
+st.dataframe(
+    pivot_reset,
+    column_config=column_config,
+    use_container_width=True,
+    hide_index=True,
+)
