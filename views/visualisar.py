@@ -60,7 +60,7 @@ if "id" in url_parameters:
   if atendimentos_df.empty:
 
     error_page = True
-    erro_message = "Erro ao selecionar Prestadora...\nClick em recarregar.."
+    erro_message = "Não há dados dessa prestadora na base de agendamentos...\nClick em recarregar.."
 
   if error_page:
 
