@@ -23,6 +23,7 @@ merged_df = pd.merge(merged_df,comissao_df,how="left",left_on=["Procedimento","f
 merged_df["valor_total"] = merged_df["Valor"]*merged_df["quantidade"]
 
 merged_df = merged_df.loc[~merged_df["Valor"].isna()]
+st.write(merged_df.columns)
 groupby_mes = merged_df.groupby(["nome_prestador","Tipo de Prestador","periodo"]).agg({"valor_total":"sum"})
 
 st.dataframe(groupby_mes)
