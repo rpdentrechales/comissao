@@ -28,9 +28,6 @@ def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
                                             reset_cache = reset_cache,
                                             query=query_prestadora)
 
-  prestadora_df = prestadora_df.loc[prestadora_df["id_prestador"] == id_prestadora]
-
-
   if prestadora_df.empty:
 
     error_page = True
