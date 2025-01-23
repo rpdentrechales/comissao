@@ -50,6 +50,18 @@ if "id" in url_parameters:
     error_page = True
     erro_message = "Erro no cadastro da Prestadora...\nClick em recarregar.."
 
+  query_prestador = {"Prestador": nome_prestadora}
+  atendimentos_df = get_dataframe_from_mongodb(
+                                              collection_name="agendamentos_db",
+                                              database_name="relatorio_comissao",
+                                              query=query_prestador
+                                              )
+  
+  if atendimentos_df.empty:
+
+    error_page = True
+    erro_message = "Erro ao selecionar Prestadora...\nClick em recarregar.."
+
   if error_page:
 
     st.title(erro_message)
@@ -62,13 +74,6 @@ if "id" in url_parameters:
 
   else:
 
-    query_prestador = {"Prestador": nome_prestadora}
-    atendimentos_df = get_dataframe_from_mongodb(
-                                                collection_name="agendamentos_db",
-                                                database_name="relatorio_comissao",
-                                                query=query_prestador
-                                                )
-    
     atendimentos_df['Data'] = pd.to_datetime(atendimentos_df['Data'],format="%d/%m/%Y")
     atendimentos_df['period'] = atendimentos_df['Data'].dt.to_period('M')
     merged_data_df = pd.merge(atendimentos_df,comissao_df,how="left",left_on="Procedimento",right_on="Procedimento")
