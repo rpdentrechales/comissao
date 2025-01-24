@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 from auxiliar.auxiliar import *
+import numpy as np
 
 st.set_page_config(page_title="Pró-Corpo - Configurações", page_icon="💎",layout="wide")
 
@@ -87,8 +88,8 @@ if seletor_pagina == "Comissões":
 
   comissao_df = comissao_df[column_order_comissao]
   comissao_df = comissao_df.sort_values(by=["Valor","Procedimento"], ascending=[True,True],na_position="first")
-  comissao_df["Valor"] = comissao_df["Valor"].fillna("")
-  st.write("Chegou aqui")
+  comissao_df["Valor"] = comissao_df["Valor"].fillna(np.nan)
+
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
                                       hide_index=True,
