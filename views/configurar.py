@@ -87,7 +87,7 @@ if seletor_pagina == "Comissões":
 
   comissao_df = comissao_df[column_order_comissao]
   comissao_df = comissao_df.sort_values(by=["Valor","Procedimento"], ascending=[True,True],na_position="first")
-  st.dataframe(comissao_df)
+  comissao_df["Valor"] = comissao_df["Valor"].fillna("")
   
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
