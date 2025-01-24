@@ -138,7 +138,7 @@ def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
 
         result_procedimento = upload_dataframe_to_mongodb(collection_name="procedimentos",
                                 database_name="relatorio_comissao",
-                                dataframe=procedimentos_sem_valor["Procedimento"].unique(),
+                                dataframe=procedimentos_sem_valor["Procedimento"].unique(),columns=["Procedimento"],
                                 unique_keys=["Procedimento"])
     
         st.success("Procedimentos informados com sucesso!")
