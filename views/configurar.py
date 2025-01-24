@@ -77,8 +77,8 @@ if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
 
   column_order_comissao = ["Procedimento","Tipo de prestador","Valor"]
-  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
-  opcoes_procedimentos = procedimentos_df["procedimento"].unique()
+  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].dropna().unique()
+  opcoes_procedimentos = procedimentos_df["procedimento"].dropna().unique()
 
   column_config_comissao = {
       "Tipo de prestador": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestador),
@@ -88,10 +88,6 @@ if seletor_pagina == "Comissões":
 
   comissao_df = comissao_df[column_order_comissao]
   comissao_df = comissao_df.sort_values(by=["Valor","Procedimento"], ascending=[True,True],na_position="first")
-
-  st.write(opcoes_tipo_prestador)
-  st.write(opcoes_procedimentos)
-  st.dataframe(comissao_df)
 
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
