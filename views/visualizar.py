@@ -12,9 +12,11 @@ url_parameters = st.query_params
 header_1,header_2 = st.columns([3,1])
 
 with header_1:
-  st.image("assets/logo-topo-min.png",use_container_width=True)
-with header_2:
   st.title("Comissões:")
+
+with header_2:
+  st.image("assets/logo-topo-min.png",use_container_width=True)
+
 
 if "id" in url_parameters:
 
