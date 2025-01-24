@@ -25,7 +25,7 @@ pg = st.navigation(
 
 
 # --- SHARED ON ALL PAGES ---
-st.logo("assets/logoprocorpo.jpg")
+st.logo("assets/logoprocorpo.jpg",size="large")
 
 
 # --- RUN NAVIGATION ---
