@@ -41,7 +41,7 @@ if seletor_pagina == "Geral":
     column_config={
             "nome_prestador": "Prestador",
             "Tipo de prestador": "Tipo de Prestador",
-            **{col: st.column_config.NumberColumn(f"Comissão - {col}",width="medium",format="R$%.2f") for col in pivot.columns},
+            **{col: st.column_config.NumberColumn(f"Comissão - {col}",width="small",format="R$%.2f") for col in pivot.columns},
         }
 
 
