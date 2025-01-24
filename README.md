@@ -2,13 +2,12 @@
 Relatório de Comissão
 
 ## Atualizações em aberto:
-1. Adicionar status do Prestadora
-2. Criar uma área de Upload de excel só para visualização do resumo de comissão
-3. Criar uma área do Upload de excel com o fechamento
-4. Prévia/Realtime
-5. Ajustar funções do MongoDB para utilizar recursos nativos do Streamlit.
-6. Adicionar logo e outros elementos gráficos
-7. Ordenar comissões para que procedimentos sem valor apareçam no inicio da tabela
+
+1. Criar uma área de Upload de excel só para visualização do resumo de comissão
+2. Criar uma área do Upload de excel com o fechamento
+3. Prévia/Realtime
+4. Ajustar funções do MongoDB para utilizar recursos nativos do Streamlit.
+5. Adicionar logo e outros elementos gráficos
 
 ## Atualizações realizadas:
 1. Criar área para cadastrar valor do procedimento por função
@@ -16,3 +15,5 @@ Relatório de Comissão
 3. Criar sistema para reportar procedimentos sem valor na área de visualização
 4. Adicionar um extrato por prestador
 5. Arrumar botão "Informar procedimentos" na página de visualização
+6. Ordenar comissões para que procedimentos sem valor apareçam no inicio da tabela
+7. Adicionar status do Prestadora
