@@ -6,7 +6,7 @@ from auxiliar.auxiliar import *
 st.set_page_config(page_title="Pró-Corpo - Configurações", page_icon="💎",layout="wide")
 
 st.title("Configurações")
-seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões","Tipo de prestadoras","Procedimentos"],selection_mode="single",default="Prestadoras")
+seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões","Tipo de prestadoras"],selection_mode="single",default="Prestadoras")
 
 if "dados_comissao" in st.session_state:
   comissao_df = st.session_state["dados_comissao"]
@@ -37,34 +37,34 @@ prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://v
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
-  column_order_prestadoras = ["nome_prestador","funcao_prestadora","url","id_prestador"]
+  column_order_prestadoras = ["nome_prestador","funcao_prestadora","url","id_prestador","status"]
   opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
   
   column_config_prestadoras = {
       "nome_prestador": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
       "funcao_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestador),
       "url": st.column_config.LinkColumn("URL da Prestadora", display_text="Abrir URL"),
-      "id_prestador": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True)
+      "id_prestador": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True),
+      "status": st.column_config.SelectboxColumn("Status do Prestador",width="medium",options=["ativo","inativo"]),
   }
 
-  editar_linhas = st.toggle("Deletar linhas",value=False)
+  mostrar_todos = st.toggle("Mostrar todos",value=False)
 
-  if editar_linhas:
-    num_rows = "dynamic"
-
+  if mostrar_todos:
+    visualizar_prestadoras_df = prestadora_df.loc[prestadora_df["status"].isin(["ativo","inativo"])]
   else:
-    num_rows = "fixed"
+    visualizar_prestadoras_df = prestadora_df.loc[prestadora_df["status"].isin(["ativo"])]
 
-  edited_prestadora_df = st.data_editor(prestadora_df,
+  edited_prestadora_df = st.data_editor(visualizar_prestadoras_df,
                                         use_container_width=True,
                                         hide_index=True,
                                         column_order=column_order_prestadoras,
                                         column_config=column_config_prestadoras,
-                                        num_rows=num_rows)
+                                        num_rows="fixed")
 
   if st.button("Salvar alterações"):
-
-    st.session_state["dados_prestadoras"] = edited_prestadora_df[column_order_prestadoras]
+    coluns_para_subir = ["nome_prestador","funcao_prestadora","id_prestador","status"]
+    st.session_state["dados_prestadoras"] = edited_prestadora_df[coluns_para_subir]
     result = upload_dataframe_to_mongodb(collection_name="prestadores_db",
                             database_name="relatorio_comissao",
                             dataframe=edited_prestadora_df,
@@ -140,22 +140,3 @@ if seletor_pagina == "Tipo de prestadoras":
                             unique_keys=["funcao_prestadora"])
     
     st.success("Alterações salvas com sucesso!")
-
-if seletor_pagina == "Procedimentos":
-
-  st.subheader("Configurar Procedimentos")
-
-  column_order_procedimento = ["procedimento"]
-
-  column_config_procedimento = {
-      "tipo_prestador": st.column_config.TextColumn("Tipo de prestador",width="medium")
-  }
-
-  procedimentos_df = procedimentos_df[column_order_procedimento]
-
-  st.dataframe(procedimentos_df,
-               use_container_width=False,
-               hide_index=True,
-               column_order=column_order_procedimento,
-               column_config=column_config_procedimento
-               )
