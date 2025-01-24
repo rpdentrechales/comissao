@@ -93,7 +93,7 @@ if seletor_pagina == "Comissões":
                                       hide_index=True,
                                       column_order=column_order_comissao,
                                       column_config=column_config_comissao,
-                                      num_rows="dynamic"
+                                      num_rows="fixed"
                                       )
 
   if st.button("Salvar alterações"):
