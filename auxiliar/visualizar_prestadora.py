@@ -120,10 +120,12 @@ def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
                 column_config=column_config_comissao
                 )
 
-    procedimentos_sem_valor = merged_data_df.loc[merged_data_df["Valor"].isnull(),["Procedimento","Tipo de prestador","Valor"]].drop_duplicates()
-    procedimentos_sem_valor["Tipo de prestador"] = funcao_prestadora
+    procedimentos_e_funcao_sem_valor = merged_data_df.loc[merged_data_df["Valor"].isnull(),["Procedimento","Tipo de prestador","Valor"]].drop_duplicates()
+    procedimentos_e_funcao_sem_valor["Tipo de prestador"] = funcao_prestadora
 
-    quantidade_de_procedimentos_sem_valor = procedimentos_sem_valor.shape[0]
+    procedimentos_sem_valor_df = pd.DataFrame(procedimentos_e_funcao_sem_valor["Procedimento"].unique(),columns=["Procedimento"])
+
+    quantidade_de_procedimentos_sem_valor = procedimentos_e_funcao_sem_valor.shape[0]
 
     if quantidade_de_procedimentos_sem_valor > 0:
       st.write(f"Foram encontrados {quantidade_de_procedimentos_sem_valor} procedimentos sem valor cadastrado")
@@ -133,12 +135,12 @@ def visualizar_prestadora(id_prestadora=None,nome_prestadora=None):
       if subir_procedimentos:
         result_comissao = upload_dataframe_to_mongodb(collection_name="comissoes",
                                 database_name="relatorio_comissao",
-                                dataframe=procedimentos_sem_valor,
+                                dataframe=procedimentos_e_funcao_sem_valor,
                                 unique_keys=["Procedimento","Tipo de prestador"])
 
         result_procedimento = upload_dataframe_to_mongodb(collection_name="procedimentos",
                                 database_name="relatorio_comissao",
-                                dataframe=procedimentos_sem_valor["Procedimento"].unique(),columns=["Procedimento"],
+                                dataframe=procedimentos_sem_valor_df,
                                 unique_keys=["Procedimento"])
     
         st.success("Procedimentos informados com sucesso!")
