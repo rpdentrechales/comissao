@@ -84,7 +84,7 @@ if seletor_pagina == "Comissões":
       "Tipo de prestador": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestador),
       "Procedimento": st.column_config.SelectboxColumn("Procedimento",width="medium",options=opcoes_procedimentos)
   }
-  
+
    # "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
 
   comissao_df = comissao_df[column_order_comissao]
@@ -97,7 +97,6 @@ if seletor_pagina == "Comissões":
                                       use_container_width=False,
                                       hide_index=True,
                                       column_order=column_order_comissao,
-                                      column_config=column_config_comissao,
                                       num_rows="fixed"
                                       )
 
