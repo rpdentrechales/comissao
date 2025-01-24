@@ -16,7 +16,7 @@ pg = st.navigation(
 
 
 # --- SHARED ON ALL PAGES ---
-# st.logo("assets/codingisfun_logo.png")
+st.logo("assets/logo-topo-min.png",size="large")
 
 
 # --- RUN NAVIGATION ---
