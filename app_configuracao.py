@@ -25,7 +25,7 @@ pg = st.navigation(
 
 
 # --- SHARED ON ALL PAGES ---
-# st.logo("assets/codingisfun_logo.png")
+st.logo("assets/logoprocorpo.jpg")
 
 
 # --- RUN NAVIGATION ---
