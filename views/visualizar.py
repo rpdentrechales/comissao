@@ -9,12 +9,16 @@ st.set_page_config(page_title="Pró-Corpo - Visualizar Comissões", page_icon="�
 
 url_parameters = st.query_params
 
-st.image("assets/logo-topo-min.png")
+header_1,header_2 = st.columns([3,1])
+
+with header_1:
+  st.image("assets/logo-topo-min.png",use_container_width=True)
+with header_2:
+  st.title("Comissões:")
+
 if "id" in url_parameters:
 
   id_prestadora = st.query_params["id"]
-
-  st.title("Comissões:")
   visualizar_prestadora(id_prestadora=id_prestadora)
 
 else:
