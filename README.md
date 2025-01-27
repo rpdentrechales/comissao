@@ -8,7 +8,6 @@ Relatório de Comissão
 3. Prévia/Realtime
 4. Ajustar funções do MongoDB para utilizar recursos nativos do Streamlit.
 
-
 ## Atualizações realizadas:
 1. Criar área para cadastrar valor do procedimento por função
 2. Ajustar visualização para que considere o valor do procedimento e do tipo de prestador
