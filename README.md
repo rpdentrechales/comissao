@@ -7,6 +7,7 @@ Relatório de Comissão
 2. Criar uma área do Upload de excel com o fechamento
 3. Prévia/Realtime
 4. Ajustar funções do MongoDB para utilizar recursos nativos do Streamlit.
+5. Fazer uma área de de/para dos procedimentos para diminuir o número de procedimentos
 
 ## Atualizações realizadas:
 1. Criar área para cadastrar valor do procedimento por função
