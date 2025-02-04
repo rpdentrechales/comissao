@@ -32,19 +32,16 @@ if "dados_tipo_prestador" in st.session_state:
 else:
   tipo_prestador_df = get_dataframe_from_mongodb(collection_name="tipo_prestador", database_name="relatorio_comissao")
   st.session_state["dados_tipo_prestador"] = tipo_prestador_df
-
-prestadora_df["url"] = prestadora_df["id_prestador"].apply(lambda x: f"https://visualizar-comissao.streamlit.app/?id={x}")
             
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
-  column_order_prestadoras = ["nome_prestador","funcao_prestadora","url","id_prestador","status"]
+  column_order_prestadoras = ["nome_prestador","funcao_prestadora","id_prestador","status"]
   opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
   
   column_config_prestadoras = {
       "nome_prestador": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
       "funcao_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestador),
-      "url": st.column_config.LinkColumn("URL da Prestadora", display_text="Abrir URL"),
       "id_prestador": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True),
       "status": st.column_config.SelectboxColumn("Status do Prestador",width="medium",options=["ativo","inativo"]),
   }
