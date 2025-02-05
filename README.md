@@ -13,6 +13,7 @@ Relatório de Comissão
 8. Regra Lavien
 9. Regra Avaliações
 10. Período
+11. Adicionar funções tratar os dados no Streamlit
 
 ## Atualizações realizadas:
 1. Criar área para cadastrar valor do procedimento por função
@@ -23,3 +24,4 @@ Relatório de Comissão
 6. Ordenar comissões para que procedimentos sem valor apareçam no inicio da tabela
 7. Adicionar status do Prestadora
 8. Adicionar logo e outros elementos gráficos
+9. Subir e atualizar base com dados do VMB
