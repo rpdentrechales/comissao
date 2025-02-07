@@ -109,9 +109,9 @@ if seletor_pagina == "Tipo de prestadoras":
       "tipo_prestadora": st.column_config.TextColumn("Tipo de prestador",width="medium")
   }
 
-  tipo_prestador_df = tipo_prestador_df[column_order_tipo_prestador]
+  tipo_prestador_df = tipo_prestadora_df[column_order_tipo_prestador]
 
-  edited_tipo_prestador_df = st.data_editor(tipo_prestador_df,
+  edited_tipo_prestadora_df = st.data_editor(tipo_prestadora_df,
                                       use_container_width=False,
                                       hide_index=True,
                                       column_order=column_order_tipo_prestador,
@@ -121,8 +121,8 @@ if seletor_pagina == "Tipo de prestadoras":
 
   if st.button("Salvar alterações"):
 
-    edited_tipo_prestador_df = edited_tipo_prestador_df.loc[~edited_tipo_prestador_df["tipo_prestador"].isna()]
-    st.session_state["dados_tipo_prestador"] = edited_tipo_prestador_df
-    update_to_sheets("tipo_prestadora", edited_tipo_prestador_df)
+    edited_tipo_prestadora_df = edited_tipo_prestadora_df.loc[~edited_tipo_prestadora_df["tipo_prestador"].isna()]
+    st.session_state["dados_tipo_prestador"] = edited_tipo_prestadora_df
+    update_to_sheets("tipo_prestadora", edited_tipo_prestadora_df)
     
     st.success("Alterações salvas com sucesso!")
