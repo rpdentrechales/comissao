@@ -103,10 +103,10 @@ if seletor_pagina == "Tipo de prestadoras":
 
   st.subheader("Configurar Tipo de prestadoras")
 
-  column_order_tipo_prestador = ["tipo_prestador"]
+  column_order_tipo_prestador = ["tipo_prestadora"]
 
   column_config_tipo_prestador = {
-      "tipo_prestador": st.column_config.TextColumn("Tipo de prestador",width="medium")
+      "tipo_prestadora": st.column_config.TextColumn("Tipo de prestador",width="medium")
   }
 
   tipo_prestador_df = tipo_prestador_df[column_order_tipo_prestador]
@@ -122,12 +122,7 @@ if seletor_pagina == "Tipo de prestadoras":
   if st.button("Salvar alterações"):
 
     edited_tipo_prestador_df = edited_tipo_prestador_df.loc[~edited_tipo_prestador_df["tipo_prestador"].isna()]
-    edited_tipo_prestador_df = edited_tipo_prestador_df[column_order_tipo_prestador]
-    st.session_state["dados_tipo_prestador"] = edited_tipo_prestador_df[column_order_tipo_prestador]
-
-    result = upload_dataframe_to_mongodb(collection_name="tipo_prestador",
-                            database_name="relatorio_comissao",
-                            dataframe=edited_tipo_prestador_df,
-                            unique_keys=["funcao_prestadora"])
+    st.session_state["dados_tipo_prestador"] = edited_tipo_prestador_df
+    update_to_sheets("tipo_prestadora", edited_tipo_prestador_df)
     
     st.success("Alterações salvas com sucesso!")
