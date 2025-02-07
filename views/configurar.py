@@ -32,16 +32,18 @@ if "tipo_prestadora" in st.session_state:
 else:
   tipo_prestadora_df = load_from_sheets("tipo_prestadora")
   st.session_state["tipo_prestadora"] = tipo_prestadora_df
-            
+
+opcoes_tipo_prestadora = tipo_prestadora_df["tipo_prestador"].dropna().unique()
+opcoes_procedimentos = procedimentos_df["procedimento"].dropna().unique()
+
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
   column_order_prestadoras = ["nome_prestadora","tipo_prestadora","status","id_prestadora"]
-  opcoes_tipo_prestador = tipo_prestadora_df["tipo_prestadora"].unique()
   
   column_config_prestadoras = {
       "nome_prestadora": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
-      "tipo_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestador),
+      "tipo_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestadora),
       "id_prestadora": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True),
       "status": st.column_config.SelectboxColumn("Status do Prestador",width="medium",options=["ativo","inativo"]),
   }
@@ -69,18 +71,16 @@ if seletor_pagina == "Prestadoras":
 if seletor_pagina == "Comissões":
   st.subheader("Configurar comissões")
 
-  column_order_comissao = ["Procedimento","Tipo de prestador","Valor"]
-  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].dropna().unique()
-  opcoes_procedimentos = procedimentos_df["procedimento"].dropna().unique()
+  column_order_comissao = ["procedimento_padronizado","tipo_prestadora","valor"]
 
   column_config_comissao = {
-      "Tipo de prestador": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestador),
-      "Procedimento": st.column_config.SelectboxColumn("Procedimento",width="medium",options=opcoes_procedimentos),
-      "Valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
+      "tipo_prestadora": st.column_config.SelectboxColumn("Tipo de prestador",width="medium",options=opcoes_tipo_prestadora),
+      "procedimento_padronizado": st.column_config.SelectboxColumn("Procedimento",width="medium",options=opcoes_procedimentos),
+      "valor": st.column_config.NumberColumn("Valor Comissão",width="medium",format="R$%.2f")
   }
 
   comissao_df = comissao_df[column_order_comissao]
-  comissao_df = comissao_df.sort_values(by=["Valor","Procedimento"], ascending=[True,True],na_position="first")
+  comissao_df = comissao_df.sort_values(by=["valor","procedimento_padronizado"], ascending=[True,True],na_position="first")
 
   edited_comissao_df = st.data_editor(comissao_df,
                                       use_container_width=False,
@@ -93,12 +93,9 @@ if seletor_pagina == "Comissões":
   if st.button("Salvar alterações"):
 
     edited_comissao_df = edited_comissao_df.loc[~edited_comissao_df[["Procedimento","Tipo de prestador"]].isna().any(axis=1)]
-    st.session_state["dados_comissao"] = edited_comissao_df[column_order_comissao]
+    st.session_state["dados_comissao"] = edited_comissao_df
     
-    result = upload_dataframe_to_mongodb(collection_name="comissoes",
-                            database_name="relatorio_comissao",
-                            dataframe=edited_comissao_df,
-                            unique_keys=["Procedimento","Tipo de prestador"])
+    update_to_sheets("comissoes", edited_comissao_df)
     
     st.success("Alterações salvas com sucesso!")
 
