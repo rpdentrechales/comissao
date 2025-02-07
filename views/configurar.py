@@ -12,37 +12,37 @@ seletor_pagina = st.pills("Configurar",["Prestadoras", "Comissões","Tipo de pre
 if "dados_comissao" in st.session_state:
   comissao_df = st.session_state["dados_comissao"]
 else:
-  comissao_df = get_dataframe_from_mongodb(collection_name="comissoes", database_name="relatorio_comissao")
+  comissao_df = load_from_sheets("comissoes")
   st.session_state["dados_comissao"] = comissao_df
 
 if "dados_prestadoras" in st.session_state:
   prestadora_df = st.session_state["dados_prestadoras"]
 else:
-  prestadora_df = get_dataframe_from_mongodb(collection_name="prestadores_db", database_name="relatorio_comissao")
+  prestadora_df = load_from_sheets("base_prestadoras")
   st.session_state["dados_prestadoras"] = prestadora_df
 
 if "dados_procedimentos" in st.session_state:
   procedimentos_df = st.session_state["dados_procedimentos"]
 else:
-  procedimentos_df = get_dataframe_from_mongodb(collection_name="procedimentos", database_name="relatorio_comissao")
+  procedimentos_df = load_from_sheets("procedimentos_padronizados")
   st.session_state["dados_procedimentos"] = procedimentos_df
 
-if "dados_tipo_prestador" in st.session_state:
-  tipo_prestador_df = st.session_state["dados_tipo_prestador"]
+if "tipo_prestadora" in st.session_state:
+  tipo_prestadora_df = st.session_state["tipo_prestadora"]
 else:
-  tipo_prestador_df = get_dataframe_from_mongodb(collection_name="tipo_prestador", database_name="relatorio_comissao")
-  st.session_state["dados_tipo_prestador"] = tipo_prestador_df
+  tipo_prestadora_df = load_from_sheets("tipo_prestadora")
+  st.session_state["tipo_prestadora"] = tipo_prestadora_df
             
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
 
-  column_order_prestadoras = ["nome_prestador","funcao_prestadora","id_prestador","status"]
-  opcoes_tipo_prestador = tipo_prestador_df["tipo_prestador"].unique()
+  column_order_prestadoras = ["nome_prestadora","tipo_prestadora","status","id_prestadora"]
+  opcoes_tipo_prestador = tipo_prestadora_df["tipo_prestadora"].unique()
   
   column_config_prestadoras = {
-      "nome_prestador": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
-      "funcao_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestador),
-      "id_prestador": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True),
+      "nome_prestadora": st.column_config.TextColumn("Nome da Prestadora",width="medium",disabled=True),
+      "tipo_prestadora": st.column_config.SelectboxColumn("Tipo Prestador",width="medium",options=opcoes_tipo_prestador),
+      "id_prestadora": st.column_config.TextColumn("ID da Prestadora",width="small",disabled=True),
       "status": st.column_config.SelectboxColumn("Status do Prestador",width="medium",options=["ativo","inativo"]),
   }
 
@@ -61,12 +61,8 @@ if seletor_pagina == "Prestadoras":
                                         num_rows="fixed")
 
   if st.button("Salvar alterações"):
-    coluns_para_subir = ["nome_prestador","funcao_prestadora","id_prestador","status"]
-    st.session_state["dados_prestadoras"] = edited_prestadora_df[coluns_para_subir]
-    result = upload_dataframe_to_mongodb(collection_name="prestadores_db",
-                            database_name="relatorio_comissao",
-                            dataframe=edited_prestadora_df,
-                            unique_keys=["nome_prestador"])
+    st.session_state["dados_prestadoras"] = edited_prestadora_df
+    update_to_sheets("base_prestadoras", edited_prestadora_df)
 
     st.success("Alterações salvas com sucesso!")
 

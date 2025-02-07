@@ -4,6 +4,7 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 import hashlib
+from streamlit_gsheets import GSheetsConnection
 
 @st.cache_data
 def get_dataframe_from_mongodb(collection_name, database_name, query={},reset_cache=None):
@@ -53,6 +54,17 @@ def upload_dataframe_to_mongodb(collection_name, database_name, dataframe, uniqu
 
     return results
 
+def load_from_sheets(worksheet):
+
+  conn = st.connection("gsheets", type=GSheetsConnection)
+  df = conn.read(worksheet=worksheet)
+
+  return df
+
+def update_to_sheets(worksheet, df):
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    conn.update(data=df,worksheet=worksheet)
+    return df
 
 def convert_name_to_id(name):
   id = hashlib.md5(name.encode()).hexdigest()[:12]

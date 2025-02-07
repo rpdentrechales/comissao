@@ -3,3 +3,4 @@ pandas
 datetime
 pymongo
 plotly
+st-gsheets-connection
