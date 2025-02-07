@@ -33,8 +33,8 @@ else:
   tipo_prestadora_df = load_from_sheets("tipo_prestadora")
   st.session_state["tipo_prestadora"] = tipo_prestadora_df
 
-opcoes_tipo_prestadora = tipo_prestadora_df["tipo_prestador"].dropna().unique()
-opcoes_procedimentos = procedimentos_df["procedimento"].dropna().unique()
+opcoes_tipo_prestadora = tipo_prestadora_df["tipo_prestadora"].dropna().unique()
+opcoes_procedimentos = procedimentos_df["procedimento_padronizado"].dropna().unique()
 
 if seletor_pagina == "Prestadoras":
   st.subheader("Configurar prestadoras")
