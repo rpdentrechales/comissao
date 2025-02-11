@@ -7,9 +7,9 @@ configurar_page = st.Page(
     icon=":material/settings:"
 )
 
-extrato_page = st.Page(
-    "views/extrato.py",
-    title="Extrato",
+comissoes_page = st.Page(
+    "views/comissoes.py",
+    title="Comissões Consolidadas",
     icon=":material/payments:",
     default=True
 )
@@ -17,7 +17,7 @@ extrato_page = st.Page(
 # --- NAVIGATION SETUP [WITH SECTIONS]---
 pg = st.navigation(
     {
-        "Extratos": [extrato_page],
+        "Comissões": [comissoes_page],
         "Configurar": [configurar_page],
         
     }
