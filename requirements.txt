@@ -4,3 +4,4 @@ datetime
 pymongo
 plotly
 st-gsheets-connection
+openpyxl
