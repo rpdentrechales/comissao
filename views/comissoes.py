@@ -23,4 +23,8 @@ with uploader_col_2:
     vmb_file = st.file_uploader("Venda Mensal",type=["xlsx"],label_visibility = "collapsed")
 
 if (agendamento_file is not None) and (vmb_file is not None):
-    processar_button = st.button("Processar Arquivos")
+    button_disabled = False
+else:
+    button_disabled = True
+
+processar_button = st.button("Processar Arquivos",disabled=button_disable)
