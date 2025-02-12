@@ -2,15 +2,9 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 from auxiliar.auxiliar import *
-from auxiliar.visualizar_prestadora import *
 from auxiliar.arrumar_bases import *
 
 st.set_page_config(page_title="Pró-Corpo - Comissões Consolidadas", page_icon="💎",layout="wide")
-
-comissao_df = load_from_sheets("comissoes")
-prestadora_df = load_from_sheets("base_prestadoras")
-procedimentos_df = load_from_sheets("procedimentos_padronizados")
-tipo_prestadora_df = load_from_sheets("tipo_prestadora")
 
 uploader_col_1, uploader_col_2 = st.columns(2)
 
@@ -36,4 +30,4 @@ if processar_button:
 
     base_final_df = criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df)
 
-    st.dataframe(base_final_df)
+    st.write(base_final_df.columns)

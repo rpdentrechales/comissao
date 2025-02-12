@@ -1,4 +1,9 @@
 import pandas as pd
+from auxiliar.auxiliar import *
+
+comissao_df = load_from_sheets("comissoes")
+prestadora_df = load_from_sheets("base_prestadoras")
+procedimentos_df = load_from_sheets("procedimentos_padronizados")
 
 def cria_base_agendamento(agendamentos_df,procedimentos_padronizados):
 
