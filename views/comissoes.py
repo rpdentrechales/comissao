@@ -12,9 +12,12 @@ prestadora_df = load_from_sheets("base_prestadoras")
 procedimentos_df = load_from_sheets("procedimentos_padronizados")
 tipo_prestadora_df = load_from_sheets("tipo_prestadora")
 
-uploaded_file = st.file_uploader("Subir Relatório de Agendamento")
-if uploaded_file is not None:
-    
-    # Can be used wherever a "file-like" object is accepted:
-    dataframe = pd.read_excel(uploaded_file)
-    st.write(dataframe)
+uploader_col_1, uploader_col_2 = st.columns(2)
+
+with uploader_col_1:
+    st.subheader("Subir Relatório de Agendamento")
+    agendamento_file = st.file_uploader("Subir Relatório de Agendamento",type=["xlsx"],label_visibility = False)
+
+with uploader_col_2:
+    st.subheader("Subir Relatório de Venda Mensal Bruta")
+    vmb_file = st.file_uploader("Subir Relatório de Agendamento",type=["xlsx"],label_visibility = False)
