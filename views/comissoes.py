@@ -21,3 +21,6 @@ with uploader_col_1:
 with uploader_col_2:
     st.subheader("Subir Relatório de Venda Mensal Bruta")
     vmb_file = st.file_uploader("Venda Mensal",type=["xlsx"],label_visibility = "collapsed")
+
+if (agendamento_file is not None) and (vmb_file is not None):
+    processar_button = st.button("Processar Arquivos")
