@@ -34,6 +34,6 @@ if processar_button:
     venda_mensal_df = pd.read_excel(vmb_file)
     agendamentos_df = pd.read_excel(agendamento_file)
 
-    base_final_df = criar_base_final(agendamentos_df,venda_mensal_df)
+    base_final_df = criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df)
 
     st.dataframe(base_final_df)

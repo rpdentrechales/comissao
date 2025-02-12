@@ -1,10 +1,10 @@
 import pandas as pd
 
-def cria_base_agendamento(df,procedimentos_padronizados):
+def cria_base_agendamento(agendamentos_df,procedimentos_padronizados):
 
   colunas = ['ID agendamento', 'ID cliente', 'Unidade do agendamento', 'procedimento_padronizado', 'Prestador', 'Data','periodo',"mes"]
 
-  base_limpa = df.loc[df["Unidade do agendamento"] != 'PLÁSTICA']
+  base_limpa = agendamentos_df.loc[agendamentos_df["Unidade do agendamento"] != 'PLÁSTICA']
   base_limpa = base_limpa.loc[base_limpa["Unidade do agendamento"] != 'HOMA']
 
   base_limpa = base_limpa.loc[base_limpa['Status'] == "Atendido"]
@@ -22,10 +22,10 @@ def cria_base_agendamento(df,procedimentos_padronizados):
 
   return base_limpa
 
-def cria_base_revenda(df):
+def cria_base_revenda(venda_mensal_df):
   colunas = ['Data', 'Unidade','Prestador', 'valor_revenda','ID cliente',"mes","periodo","procedimento_padronizado","ID agendamento"]
 
-  revenda_df = df.loc[df["Revenda"] == "SIM"]
+  revenda_df = venda_mensal_df.loc[venda_mensal_df["Revenda"] == "SIM"]
   revenda_df = revenda_df.loc[revenda_df["Status"] == "Finalizado"]
   revenda_df = revenda_df.loc[revenda_df["Cortesia?"] == "Não"]
   revenda_df = revenda_df.loc[revenda_df["Valor líquido"] > 0]
@@ -72,10 +72,10 @@ def adicionar_revenda(base_procedimentos_final,base_revenda):
 
   return base_procedimentos_final
 
-def criar_base_final(agendamentos_df,venda_mensal_df):
+def criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_padronizados):
 
     base_revenda = cria_base_revenda(venda_mensal_df)
-    base_procedimentos_final = cria_base_agendamento(agendamentos_df)
+    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_padronizados)
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 
