@@ -16,8 +16,8 @@ uploader_col_1, uploader_col_2 = st.columns(2)
 
 with uploader_col_1:
     st.subheader("Subir Relatório de Agendamento")
-    agendamento_file = st.file_uploader("Subir Relatório de Agendamento",type=["xlsx"],label_visibility = "collapsed")
+    agendamento_file = st.file_uploader("Agendamento",type=["xlsx"],label_visibility = "collapsed")
 
 with uploader_col_2:
     st.subheader("Subir Relatório de Venda Mensal Bruta")
-    vmb_file = st.file_uploader("Subir Relatório de Agendamento",type=["xlsx"],label_visibility = "collapsed")
+    vmb_file = st.file_uploader("Venda Mensal",type=["xlsx"],label_visibility = "collapsed")
