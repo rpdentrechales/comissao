@@ -25,9 +25,6 @@ def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_
   base_limpa['periodo'] = start_of_month + pd.to_timedelta(15 * (base_limpa['Data'].dt.day > 15), unit='D')
   base_limpa["mes"] = base_limpa['Data'].dt.to_period('M')
 
-  print(base_limpa.columns)
-  
-
   base_limpa = base_limpa[colunas]
 
   return base_limpa
@@ -90,6 +87,6 @@ def criar_base_final(agendamentos_df,venda_mensal_df):
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 
-    # base_procedimentos_final = pd.merge(base_procedimentos_final,comissao_df,how="left",left_on=["procedimento_padronizado",])
+    base_final = base_procedimentos_final.groupby(["nome_prestadora","tipo_prestadora","Unidade"]).agg(comissao_total=('valor_comissao', 'sum'))
 
-    return base_procedimentos_final
+    return base_final
