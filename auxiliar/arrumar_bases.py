@@ -24,7 +24,10 @@ def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_
   start_of_month = base_limpa['Data'].dt.to_period('M').dt.start_time
   base_limpa['periodo'] = start_of_month + pd.to_timedelta(15 * (base_limpa['Data'].dt.day > 15), unit='D')
   base_limpa["mes"] = base_limpa['Data'].dt.to_period('M')
-  st.write(base_limpa.columns)
+
+  print(base_limpa.columns)
+  
+
   base_limpa = base_limpa[colunas]
 
   return base_limpa
