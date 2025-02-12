@@ -5,9 +5,9 @@ comissao_df = load_from_sheets("comissoes")
 prestadora_df = load_from_sheets("base_prestadoras")
 procedimentos_df = load_from_sheets("procedimentos_padronizados")
 
-def cria_base_agendamento(agendamentos_df,procedimentos_padronizados):
+def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_df):
 
-  colunas = ['ID agendamento', 'ID cliente', 'Unidade do agendamento', 'procedimento_padronizado', 'Prestador', 'Data','periodo',"mes"]
+  colunas = ['ID agendamento', 'ID cliente', 'Unidade do agendamento', 'procedimento_padronizado', "nome_prestadora","tipo_prestadora", 'Data','periodo',"mes","valor_comissao"]
 
   base_limpa = agendamentos_df.loc[agendamentos_df["Unidade do agendamento"] != 'PLÁSTICA']
   base_limpa = base_limpa.loc[base_limpa["Unidade do agendamento"] != 'HOMA']
@@ -17,6 +17,8 @@ def cria_base_agendamento(agendamentos_df,procedimentos_padronizados):
   procedimentos_padronizados["procedimento_crm"] = procedimentos_padronizados["procedimento_crm"].str.normalize("NFKC").str.strip()
 
   base_limpa = pd.merge(base_limpa, procedimentos_padronizados, left_on="Procedimento", right_on="procedimento_crm", how="left")
+  base_limpa = pd.merge(base_limpa, prestadora_df, left_on="Prestador", right_on="nome_prestadora", how="left")
+  base_limpa = pd.merge(base_limpa, comissao_df, left_on=["procedimento_padronizado","tipo_prestadora"], right_on=["procedimento_padronizado","tipo_prestadora"], how="left")
 
   base_limpa["Data"] = pd.to_datetime(base_limpa["Data"],format="%d/%m/%Y")
   start_of_month = base_limpa['Data'].dt.to_period('M').dt.start_time
@@ -81,11 +83,10 @@ def adicionar_revenda(base_procedimentos_final,base_revenda):
 def criar_base_final(agendamentos_df,venda_mensal_df):
 
     base_revenda = cria_base_revenda(venda_mensal_df)
-    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df)
+    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df)
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 
-    # base_procedimentos_final = pd.merge(base_procedimentos_final,comissao_df,how="left",left_on=[""])
-
+    # base_procedimentos_final = pd.merge(base_procedimentos_final,comissao_df,how="left",left_on=["procedimento_padronizado",])
 
     return base_procedimentos_final
