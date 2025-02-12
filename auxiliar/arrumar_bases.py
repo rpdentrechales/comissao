@@ -88,5 +88,6 @@ def criar_base_final(agendamentos_df,venda_mensal_df):
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 
     base_final = base_procedimentos_final.groupby(["nome_prestadora","tipo_prestadora","Unidade"]).agg(comissao_total=('valor_comissao', 'sum'))
-
-    return base_final
+    base_final = base_final.reset_index()
+    
+    return base_procedimentos_final
