@@ -24,7 +24,8 @@ with uploader_col_2:
 
 if (agendamento_file is not None) and (vmb_file is not None):
     button_disabled = False
+
 else:
     button_disabled = True
 
-processar_button = st.button("Processar Arquivos",disabled=button_disable)
+processar_button = st.button("Processar Arquivos",disabled=button_disabled)
