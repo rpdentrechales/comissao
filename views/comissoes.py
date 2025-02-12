@@ -29,3 +29,11 @@ else:
     button_disabled = True
 
 processar_button = st.button("Processar Arquivos",disabled=button_disabled)
+
+if processar_button:
+    venda_mensal_df = pd.read_excel(vmb_file)
+    agendamentos_df = pd.read_excel(agendamento_file)
+
+    base_final_df = criar_base_final(agendamentos_df,venda_mensal_df)
+
+    st.dataframe(base_final_df)
