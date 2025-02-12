@@ -51,6 +51,7 @@ def cria_base_revenda(venda_mensal_df):
   return revenda_df
 
 def adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df):
+
   venda_mensal_df["Data venda"] = pd.to_datetime(venda_mensal_df["Data venda"])
   start_of_month = venda_mensal_df['Data venda'].dt.to_period('M').dt.start_time
   venda_mensal_df['periodo'] = start_of_month + pd.to_timedelta(15 * (venda_mensal_df['Data venda'].dt.day > 15), unit='D')
@@ -77,11 +78,14 @@ def adicionar_revenda(base_procedimentos_final,base_revenda):
 
   return base_procedimentos_final
 
-def criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_padronizados):
+def criar_base_final(agendamentos_df,venda_mensal_df):
 
     base_revenda = cria_base_revenda(venda_mensal_df)
-    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_padronizados)
+    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df)
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
+
+    # base_procedimentos_final = pd.merge(base_procedimentos_final,comissao_df,how="left",left_on=[""])
+
 
     return base_procedimentos_final
