@@ -29,5 +29,5 @@ if processar_button:
     agendamentos_df = pd.read_excel(agendamento_file)
 
     relatorio_comissoes_df = criar_base_final(agendamentos_df,venda_mensal_df)
-
+    st.write(relatorio_comissoes_df.columns)
     st.dataframe(relatorio_comissoes_df)
