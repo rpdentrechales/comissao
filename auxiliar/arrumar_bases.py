@@ -31,6 +31,7 @@ def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_
   return base_limpa
 
 def cria_base_revenda(venda_mensal_df):
+  print("Criando base revenda")
   colunas = ['Data', 'Unidade','Prestador', 'valor_revenda','ID cliente',"mes","periodo","procedimento_padronizado","ID agendamento"]
 
   revenda_df = venda_mensal_df.loc[venda_mensal_df["Revenda"] == "SIM"]
@@ -82,6 +83,7 @@ def adicionar_revenda(base_procedimentos_final,base_revenda):
   return base_procedimentos_final
 
 def criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df):
+    print("Criando base final...")
 
     base_revenda = cria_base_revenda(venda_mensal_df)
     base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
