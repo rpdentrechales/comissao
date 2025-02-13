@@ -100,9 +100,10 @@ def cria_avaliacoes(base_procedimentos_final,tipo_pagamento):
   else:
     coluna_receita == "receita_mes"
 
-  base_avalicoes = base_procedimentos_final.loc[base_procedimentos_final["procedimento_padronizado"].str.contains("avaliação")]
+  base_avaliacoes = base_procedimentos_final.loc[base_procedimentos_final["procedimento_padronizado"].str.contains("avaliação")]
+  base_avaliacoes["valor_avaliacao"] = base_avaliacoes.loc[base_avaliacoes[coluna_receita] > 200]
   
-  return base_avalicoes
+  return base_avaliacoes
     
 
 def criar_comissoes(base_procedimentos_final):
