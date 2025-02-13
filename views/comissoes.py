@@ -36,6 +36,7 @@ if processar_button:
     venda_mensal_df = pd.read_excel(vmb_file)
     agendamentos_df = pd.read_excel(agendamento_file)
 
-    relatorio_comissoes_df = criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
+    base_compilada_df = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
+    relatorio_comissoes_df = criar_comissoes(base_compilada_df)
 
     st.dataframe(relatorio_comissoes_df)

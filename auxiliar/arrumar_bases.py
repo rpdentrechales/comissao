@@ -3,11 +3,13 @@ import pandas as pd
 def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_df,comissao_df,tipo_prestadora_df):
 
   colunas = ['ID agendamento', 'ID cliente', 'Unidade do agendamento', 'procedimento_padronizado', "nome_prestadora",
-             "tipo_prestadora", 'Data','periodo',"mes","valor_comissao","tipo_pagamento","Prestador"]
+             "tipo_prestadora", 'Data','periodo',"mes","valor_comissao","tipo_pagamento"]
 
   for df in [agendamentos_df,procedimentos_padronizados,prestadora_df,comissao_df,tipo_prestadora_df]:
     for col in df.select_dtypes(include=["object"]).columns:
       df[col] = df[col].str.normalize("NFKC").str.strip().str.lower()
+
+  comissao_df["valor_comissao"] = comissao_df["valor_comissao"].str.replace("r$", "", regex=False).str.replace(",", ".").astype(float)
 
   base_limpa = agendamentos_df.loc[agendamentos_df["Unidade do agendamento"] != 'plástica']
   base_limpa = base_limpa.loc[base_limpa["Unidade do agendamento"] != 'homa']
@@ -82,15 +84,28 @@ def adicionar_revenda(base_procedimentos_final,base_revenda):
 
   return base_procedimentos_final
 
-def criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df):
+def criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df):
 
     base_revenda = cria_base_revenda(venda_mensal_df)
     base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 
+    return base_procedimentos_final
 
-    base_final = base_procedimentos_final.groupby(["nome_prestadora","tipo_prestadora","Unidade"]).agg(comissao_total=('valor_comissao', 'sum'))
-    base_final = base_final.reset_index()
+def cria_avaliacoes(base_procedimentos_final,tipo_pagamento):
+
+  if tipo_pagamento = "quinzenal":
+    coluna_receita = "receita_periodo"
+  else:
+    coluna_receita = "receita_mes"
+  
+  
     
-    return base_final
+
+def criar_comissoes(base_procedimentos_final):
+
+    base_comissoes = base_procedimentos_final.groupby(["nome_prestadora","tipo_prestadora","Unidade"]).agg(comissao_total=('valor_comissao', 'sum'))
+    base_comissoes = base_comissoes.reset_index()
+    
+    return base_comissoes

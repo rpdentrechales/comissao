@@ -1,4 +1,5 @@
-# %% Imports
+# %% Imports and variables
+
 import pandas as pd
 from datetime import datetime, timedelta
 from IPython.display import display
@@ -32,8 +33,7 @@ def get_sheetdata(sheet_name):
     df = pd.DataFrame(data)
 
     return df
-
-# %% 
+    
 vmb_path = "assets/venda-mensal-bruta_colab-bi_2025-02-11.xlsx"
 agendamento_path = "assets/agendamentos_colab-bi_2025-02-12 (1).xlsx"
 
@@ -44,15 +44,7 @@ prestadora_df = get_sheetdata("base_prestadoras")
 comissao_df = get_sheetdata("comissoes")
 tipo_prestadora_df = get_sheetdata("tipo_prestadora")
 
-
 # %%
-relatorio_comissoes_df = criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
+relatorio_comissoes_df = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
 
 display(relatorio_comissoes_df.sample(50))
-
-
-# %%
-base_agendamento = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
-display(base_agendamento.loc[base_agendamento["nome_prestadora"].isna(),"Prestador"].unique())
-
-# %%
