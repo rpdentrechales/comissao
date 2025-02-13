@@ -9,7 +9,7 @@ def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_
     for col in df.select_dtypes(include=["object"]).columns:
       df[col] = df[col].str.normalize("NFKC").str.strip().str.lower()
 
-  comissao_df["valor_comissao"] = comissao_df["valor_comissao"].str.replace("r$", "", regex=False).astype(str).str.replace(",", ".").astype(float)
+  comissao_df["valor_comissao"] = comissao_df["valor_comissao"].astype(str).str.replace("r$", "", regex=False).str.replace(",", ".").astype(float)
 
   base_limpa = agendamentos_df.loc[agendamentos_df["Unidade do agendamento"] != 'plástica']
   base_limpa = base_limpa.loc[base_limpa["Unidade do agendamento"] != 'homa']
