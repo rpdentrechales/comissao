@@ -95,12 +95,14 @@ def criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,presta
 
 def cria_avaliacoes(base_procedimentos_final,tipo_pagamento):
 
-  if tipo_pagamento = "quinzenal":
+  if tipo_pagamento == "quinzenal":
     coluna_receita = "receita_periodo"
   else:
-    coluna_receita = "receita_mes"
+    coluna_receita == "receita_mes"
+
+  base_avalicoes = base_procedimentos_final.loc[base_procedimentos_final["procedimento_padronizado"].str.contains("avaliação")]
   
-  
+  return base_avalicoes
     
 
 def criar_comissoes(base_procedimentos_final):
