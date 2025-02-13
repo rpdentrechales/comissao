@@ -1,30 +1,30 @@
 import pandas as pd
-from auxiliar.auxiliar import *
 
-comissao_df = load_from_sheets("comissoes")
-prestadora_df = load_from_sheets("base_prestadoras")
-procedimentos_df = load_from_sheets("procedimentos_padronizados")
-
-def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_df):
+def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_df,comissao_df,tipo_prestadora_df):
 
   colunas = ['ID agendamento', 'ID cliente', 'Unidade do agendamento', 'procedimento_padronizado', "nome_prestadora",
-             "tipo_prestadora", 'Data','periodo',"mes","valor_comissao","tipo_pagamento"]
+             "tipo_prestadora", 'Data','periodo',"mes","valor_comissao","tipo_pagamento","Prestador"]
 
-  base_limpa = agendamentos_df.loc[agendamentos_df["Unidade do agendamento"] != 'PLÁSTICA']
-  base_limpa = base_limpa.loc[base_limpa["Unidade do agendamento"] != 'HOMA']
+  for df in [agendamentos_df,procedimentos_padronizados,prestadora_df,comissao_df,tipo_prestadora_df]:
+    for col in df.select_dtypes(include=["object"]).columns:
+      df[col] = df[col].str.normalize("NFKC").str.strip().str.lower()
 
-  base_limpa = base_limpa.loc[base_limpa['Status'] == "Atendido"]
-  base_limpa["Procedimento"] = base_limpa["Procedimento"].str.normalize("NFKC").str.strip()
-  procedimentos_padronizados["procedimento_crm"] = procedimentos_padronizados["procedimento_crm"].str.normalize("NFKC").str.strip()
+  base_limpa = agendamentos_df.loc[agendamentos_df["Unidade do agendamento"] != 'plástica']
+  base_limpa = base_limpa.loc[base_limpa["Unidade do agendamento"] != 'homa']
+
+  base_limpa = base_limpa.loc[base_limpa['Status'] == "atendido"]
 
   base_limpa = pd.merge(base_limpa, procedimentos_padronizados, left_on="Procedimento", right_on="procedimento_crm", how="left")
   base_limpa = pd.merge(base_limpa, prestadora_df, left_on="Prestador", right_on="nome_prestadora", how="left")
   base_limpa = pd.merge(base_limpa, comissao_df, left_on=["procedimento_padronizado","tipo_prestadora"], right_on=["procedimento_padronizado","tipo_prestadora"], how="left")
+  base_limpa = pd.merge(base_limpa, tipo_prestadora_df, left_on=["tipo_prestadora"], right_on=["tipo_prestadora"], how="left")
 
   base_limpa["Data"] = pd.to_datetime(base_limpa["Data"],format="%d/%m/%Y")
   start_of_month = base_limpa['Data'].dt.to_period('M').dt.start_time
   base_limpa['periodo'] = start_of_month + pd.to_timedelta(15 * (base_limpa['Data'].dt.day > 15), unit='D')
   base_limpa["mes"] = base_limpa['Data'].dt.to_period('M')
+
+  base_limpa = base_limpa.reset_index()
 
   base_limpa = base_limpa[colunas]
 
@@ -81,10 +81,10 @@ def adicionar_revenda(base_procedimentos_final,base_revenda):
 
   return base_procedimentos_final
 
-def criar_base_final(agendamentos_df,venda_mensal_df):
+def criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df):
 
     base_revenda = cria_base_revenda(venda_mensal_df)
-    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df)
+    base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
     base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 

@@ -6,6 +6,11 @@ from auxiliar.arrumar_bases import *
 
 st.set_page_config(page_title="Pró-Corpo - Comissões Consolidadas", page_icon="💎",layout="wide")
 
+comissao_df = load_from_sheets("comissoes")
+prestadora_df = load_from_sheets("base_prestadoras")
+procedimentos_df = load_from_sheets("procedimentos_padronizados")
+tipo_prestadora_df = load_from_sheets("tipo_prestadora")
+
 uploader_col_1, uploader_col_2 = st.columns(2)
 
 with uploader_col_1:
@@ -29,6 +34,6 @@ if processar_button:
     venda_mensal_df = pd.read_excel(vmb_file)
     agendamentos_df = pd.read_excel(agendamento_file)
 
-    relatorio_comissoes_df = criar_base_final(agendamentos_df,venda_mensal_df)
+    relatorio_comissoes_df = criar_base_final(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
 
     st.dataframe(relatorio_comissoes_df)
