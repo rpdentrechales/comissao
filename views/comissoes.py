@@ -11,14 +11,16 @@ prestadora_df = load_from_sheets("base_prestadoras")
 procedimentos_df = load_from_sheets("procedimentos_padronizados")
 tipo_prestadora_df = load_from_sheets("tipo_prestadora")
 
+st.title("Calcular Comissões")
+
 uploader_col_1, uploader_col_2 = st.columns(2)
 
 with uploader_col_1:
-    st.subheader("Subir Relatório de Agendamento")
+    st.subheader("Subir Agendamentos")
     agendamento_file = st.file_uploader("Agendamento",type=["xlsx"],label_visibility = "collapsed")
 
 with uploader_col_2:
-    st.subheader("Subir Relatório de Venda Mensal Bruta")
+    st.subheader("Subir Venda Mensal Bruta")
     vmb_file = st.file_uploader("Venda Mensal",type=["xlsx"],label_visibility = "collapsed")
 
 if (agendamento_file is not None) and (vmb_file is not None):
