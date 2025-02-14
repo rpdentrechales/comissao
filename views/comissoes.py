@@ -40,12 +40,8 @@ if processar_button:
 
     periodos = base_compilada["periodo"].unique()
     periodos_series = pd.Series(periodos)
-    st.write(periodos_series)
-    periodos_list = ("periodo: " + periodos_series.dt.strftime('%Y-%m-%d')).to_list()
-    st.write(periodos_list)
+    periodos_list = ("periodo: " + periodos_series.dt.strftime('%Y-%m-%d')).tolist()
     periodos_list = periodos_list.insert(0,"mensal")
-
-    st.write(periodos_list)
 
     seletor_periodo = st.pills("Selecione Visão",periodos_list,selection_mode="single",default="mensal")
 
