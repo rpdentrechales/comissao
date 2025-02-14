@@ -6,6 +6,8 @@ from auxiliar.arrumar_bases import *
 
 st.set_page_config(page_title="Pró-Corpo - Comissões Consolidadas", page_icon="💎",layout="wide")
 
+dataframe_placeholder = st.empty()
+
 comissao_df = load_from_sheets("comissoes")
 prestadora_df = load_from_sheets("base_prestadoras")
 procedimentos_df = load_from_sheets("procedimentos_padronizados")
@@ -64,4 +66,5 @@ if processar_button:
     
     base_final = juntar_bases(base_comissoes,base_avaliacoes)
 
-    st.dataframe(base_final,hide_index=True)
+    dataframe_placeholder.dataframe(base_final, hide_index=True)
+    # st.dataframe(base_final,hide_index=True)
