@@ -59,9 +59,9 @@ if "base_compilada" in st.session_state:
         tipo_pagamento = "quinzenal"
 
         if seletor_periodo == periodos_list[1]:
-            base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[0]]
+            base_filtrada = base_filtrada.loc[base_filtrada["periodo"] == periodos_series[0]]
         else:
-            base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[1]]
+            base_filtrada = base_filtrada.loc[base_filtrada["periodo"] == periodos_series[1]]
     
     st.write(seletor_periodo)
     st.dataframe(base_filtrada)
