@@ -61,7 +61,7 @@ if "base_compilada" in st.session_state:
         if seletor_periodo == periodos_list[1]:
             base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[0]]
         else:
-            base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[0]]
+            base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[1]]
     
 
     base_comissoes = criar_comissoes(base_filtrada)
@@ -69,4 +69,4 @@ if "base_compilada" in st.session_state:
     
     base_final = juntar_bases(base_comissoes,base_avaliacoes)
 
-    st.dataframe(base_final)
+    st.dataframe(base_final,hide_index=True)
