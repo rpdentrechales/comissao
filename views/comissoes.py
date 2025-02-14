@@ -41,22 +41,22 @@ if processar_button:
     periodos = base_compilada["periodo"].unique()
     periodos_series = pd.Series(periodos)
     periodos_list = ("periodo: " + periodos_series.dt.strftime('%Y-%m-%d')).to_list()
-    periodos = periodos.insert(0,"mensal")
+    periodos_list = periodos_list.insert(0,"mensal")
 
-    seletor_periodo = st.pills("Selecione Visão",periodos,selection_mode="single",default="mensal")
+    seletor_periodo = st.pills("Selecione Visão",periodos_list,selection_mode="single",default="mensal")
 
     if seletor_periodo == "mensal":
-        base_filtrada = base_compilada_df.loc[base_compilada_df["tipo_pagamento"] == "mensal"]
+        base_filtrada = base_compilada.loc[base_compilada["tipo_pagamento"] == "mensal"]
         tipo_pagamento = "mensal"
 
     else:
-        base_filtrada = base_compilada_df.loc[base_compilada_df["tipo_pagamento"] == "quinzenal"]
+        base_filtrada = base_compilada.loc[base_compilada["tipo_pagamento"] == "quinzenal"]
         tipo_pagamento = "quinzenal"
 
         if seletor_periodo == periodos_list[1]:
-            base_filtrada = base_compilada_df.loc[base_compilada_df["periodo"] == periodos_series[0]]
+            base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[0]]
         else:
-            base_filtrada = base_compilada_df.loc[base_compilada_df["periodo"] == periodos_series[0]]
+            base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[0]]
     
 
     base_comissoes = criar_comissoes(base_filtrada)
