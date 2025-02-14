@@ -40,7 +40,7 @@ if processar_button:
 
     periodos = base_compilada["periodo"].unique()
     periodos_series = pd.Series(periodos)
-    periodos_list = "periodo: " + periodos.dt.strftime('%Y-%m-%d')
+    periodos_list = "periodo: " + periodos_series.dt.strftime('%Y-%m-%d')
     periodos_list = periodos.to_list()
     periodos = periodos.insert(0,"mensal")
 
