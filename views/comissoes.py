@@ -37,7 +37,12 @@ if processar_button:
     agendamentos_df = pd.read_excel(agendamento_file)
 
     base_compilada = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
+    st.session_state["base_compilada"] = base_compilada
 
+if "base_compilada" in st.session_state:
+
+    base_compilada = st.session_state["base_compilada"]
+    
     periodos = base_compilada["periodo"].unique()
     periodos_series = pd.Series(periodos)
     periodos_list = ("periodo: " + periodos_series.dt.strftime('%Y-%m-%d')).tolist()
@@ -64,9 +69,4 @@ if processar_button:
     
     base_final = juntar_bases(base_comissoes,base_avaliacoes)
 
-    st.session_state["base_final"] = base_final
-
-if "base_final" in st.session_state:
-    
-    base_final = st.session_state["base_final"]
-    st.dataframe(base_final,hide_index=True)
+    st.dataframe(base_final)
