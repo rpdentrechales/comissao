@@ -98,11 +98,14 @@ def cria_avaliacoes(base_procedimentos_final,tipo_pagamento):
   if tipo_pagamento == "quinzenal":
     coluna_receita = "receita_periodo"
   else:
-    coluna_receita == "receita_mes"
+    coluna_receita = "receita_mes"
 
-  base_avaliacoes = base_procedimentos_final.loc[base_procedimentos_final["procedimento_padronizado"].str.contains("avaliação")]
-  base_avaliacoes["valor_avaliacao"] = base_avaliacoes.loc[base_avaliacoes[coluna_receita] > 200]
-  
+  base_avaliacoes = base_procedimentos_final.loc[base_procedimentos_final["procedimento_padronizado"].str.contains("avaliação",na=False)].copy()
+  base_avaliacoes["valor_avaliacao"] = 10
+  base_avaliacoes.loc[base_avaliacoes[coluna_receita] >= 200,"valor_avaliacao"] = 20
+
+  base_avaliacoes = base_avaliacoes.groupby(["nome_prestadora","tipo_prestadora","Unidade"]).agg(avaliacoes_total=('valor_avaliacao', 'sum'))
+
   return base_avaliacoes
     
 
@@ -112,3 +115,8 @@ def criar_comissoes(base_procedimentos_final):
     base_comissoes = base_comissoes.reset_index()
     
     return base_comissoes
+
+def juntar_bases(base_comissoes,base_avaliacoes):
+  base_final = pd.merge(base_comissoes,base_avaliacoes,how="left",on=["nome_prestadora","tipo_prestadora","Unidade"])
+  
+  return base_final

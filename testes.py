@@ -45,6 +45,23 @@ comissao_df = get_sheetdata("comissoes")
 tipo_prestadora_df = get_sheetdata("tipo_prestadora")
 
 # %%
-relatorio_comissoes_df = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
+base_compilada = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
+periodos = base_compilada["periodo"].unique()
+periodos = pd.Series(periodos)
+s_date_str = "periodo: " + periodos.dt.strftime('%Y-%m-%d')
 
-display(relatorio_comissoes_df.sample(50))
+
+base_compilada.head()
+#%%
+
+base_comissoes = criar_comissoes(base_compilada)
+display(base_comissoes)
+
+
+#%%
+base_avaliacoes = cria_avaliacoes(base_compilada,"mensal")
+display(base_avaliacoes)
+
+# %%
+base_final = juntar_bases(base_comissoes,base_avaliacoes)
+display(base_final)

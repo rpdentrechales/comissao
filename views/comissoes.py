@@ -37,6 +37,32 @@ if processar_button:
     agendamentos_df = pd.read_excel(agendamento_file)
 
     base_compilada_df = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
-    relatorio_comissoes_df = criar_comissoes(base_compilada_df)
 
-    st.dataframe(relatorio_comissoes_df)
+    periodos = base_compilada["periodo"].unique()
+    periodos_series = pd.Series(periodos)
+    periodos_list = "periodo: " + periodos.dt.strftime('%Y-%m-%d')
+    periodos_list = periodos.to_list()
+    periodos = periodos.insert(0,"mensal")
+
+    seletor_periodo = st.pills("Selecione Visão",periodos,selection_mode="single",default="mensal")
+
+    if seletor_periodo == "mensal":
+        base_filtrada = base_compilada_df.loc[base_compilada_df["tipo_pagamento"] == "mensal"]
+        tipo_pagamento = "mensal"
+
+    else:
+        base_filtrada = base_compilada_df.loc[base_compilada_df["tipo_pagamento"] == "quinzenal"]
+        tipo_pagamento = "quinzenal"
+
+        if seletor_periodo == periodos_list[1]:
+            base_filtrada = base_compilada_df.loc[base_compilada_df["periodo"] == periodos_series[0]]
+        else:
+            base_filtrada = base_compilada_df.loc[base_compilada_df["periodo"] == periodos_series[0]]
+    
+
+    base_comissoes = criar_comissoes(base_filtrada)
+    base_avaliacoes = cria_avaliacoes(base_filtrada,tipo_pagamento)
+    
+    base_final = juntar_bases(base_comissoes,base_avaliacoes)
+
+    st.dataframe(base_final,hide_index=True)
