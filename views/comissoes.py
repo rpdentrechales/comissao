@@ -67,4 +67,6 @@ if processar_button:
     st.session_state["base_final"] = base_final
 
 if "base_final" in st.session_state:
+    
+    base_final = st.session_state["base_final"]
     st.dataframe(base_final,hide_index=True)
