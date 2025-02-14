@@ -43,6 +43,7 @@ if processar_button:
     periodos_list = ("periodo: " + periodos_series.dt.strftime('%Y-%m-%d')).tolist()
     st.write(periodos_list)
     periodos_list = periodos_list.insert(0,"mensal")
+    st.write(periodos_list)
 
     seletor_periodo = st.pills("Selecione Visão",periodos_list,selection_mode="single",default="mensal")
 
