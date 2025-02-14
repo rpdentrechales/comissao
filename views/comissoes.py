@@ -63,7 +63,7 @@ if "base_compilada" in st.session_state:
         else:
             base_filtrada = base_compilada.loc[base_compilada["periodo"] == periodos_series[1]]
     
-
+    st.dataframe(base_filtrada)
     base_comissoes = criar_comissoes(base_filtrada)
     st.dataframe(base_comissoes)
     base_avaliacoes = cria_avaliacoes(base_filtrada,tipo_pagamento)
