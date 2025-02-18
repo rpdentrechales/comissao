@@ -51,7 +51,7 @@ periodos = pd.Series(periodos)
 s_date_str = "periodo: " + periodos.dt.strftime('%Y-%m-%d')
 
 
-base_compilada.head()
+base_compilada.columns
 #%%
 
 base_comissoes = criar_comissoes(base_compilada)
