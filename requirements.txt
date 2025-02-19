@@ -5,3 +5,4 @@ pymongo
 plotly
 st-gsheets-connection
 openpyxl
+numpy

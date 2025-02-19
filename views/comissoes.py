@@ -65,7 +65,8 @@ if "base_compilada" in st.session_state:
     
     base_comissoes = criar_comissoes(base_filtrada)
     base_avaliacoes = cria_avaliacoes(base_filtrada,tipo_pagamento)
+    base_revenda = cria_base_revenda(venda_mensal_df)
     
-    base_final = juntar_bases(base_comissoes,base_avaliacoes)
+    base_final = juntar_bases(base_comissoes,base_avaliacoes,base_revenda)
 
     st.dataframe(base_final,hide_index=True)

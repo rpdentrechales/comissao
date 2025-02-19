@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_df,comissao_df,tipo_prestadora_df):
 
@@ -34,7 +35,7 @@ def cria_base_agendamento(agendamentos_df,procedimentos_padronizados,prestadora_
 
 def cria_base_revenda(venda_mensal_df):
 
-  colunas = ['Data', 'Unidade','Prestador', 'valor_revenda','ID cliente',"mes","periodo","procedimento_padronizado","ID agendamento"]
+  colunas = ['Unidade','nome_prestadora', "comissao_revenda"]
 
   revenda_df = venda_mensal_df.loc[venda_mensal_df["Revenda"] == "SIM"]
   revenda_df = revenda_df.loc[revenda_df["Status"] == "Finalizado"]
@@ -50,9 +51,31 @@ def cria_base_revenda(venda_mensal_df):
 
   revenda_df["procedimento_padronizado"] = "revenda"
 
-  revenda_df = revenda_df.rename(columns={"Avaliador":"Prestador","Valor líquido":"valor_revenda",'Data venda':"Data"})
-  revenda_df["ID agendamento"] = "orc-"+revenda_df["ID orçamento"].astype(str)
-  revenda_df = revenda_df[colunas]
+  revenda_df = revenda_df.rename(columns={"Avaliador":"nome_prestadora","Valor líquido":"valor_revenda",'Data venda':"Data"})
+
+  revenda_por_prestador = revenda_df.groupby(["nome_prestadora","Unidade"]).agg(valor_revenda=("valor_revenda","sum"))
+  revenda_por_prestador = revenda_por_prestador.reset_index()
+  revenda_por_prestador["revenda_total"] = revenda_por_prestador.groupby(["nome_prestadora"])['valor_revenda'].transform("sum")
+  revenda_por_prestador["revenda_proporcional"] = revenda_por_prestador["valor_revenda"]/revenda_por_prestador["revenda_total"]
+
+  valor_comissao_revenda = 50
+  bin_width = 2500
+  max_val = revenda_por_prestador["revenda_total"].max()
+  bins = np.arange(0, max_val + bin_width, bin_width)
+  labels = np.arange(0, len(bins) - 1)
+  revenda_total = revenda_por_prestador["revenda_total"]
+
+  labels = labels * valor_comissao_revenda
+  revenda_por_prestador["comissao_revenda"] = pd.cut(revenda_total, bins=bins, labels=labels, include_lowest=True)
+  revenda_por_prestador.loc[revenda_por_prestador["comissao_revenda"] < 200,"comissao_revenda"] = 0
+  revenda_por_prestador["comissao_revenda"] = revenda_por_prestador["comissao_revenda"].astype(float)
+  revenda_por_prestador["comissao_revenda"] = (
+      revenda_por_prestador["comissao_revenda"] * revenda_por_prestador["revenda_proporcional"]
+  )
+
+  revenda_df = revenda_por_prestador[colunas]
+  revenda_df["Unidade"] = revenda_df["Unidade"].str.normalize("NFKC").str.strip().str.lower()
+  revenda_df["nome_prestadora"] = revenda_df["nome_prestadora"].str.normalize("NFKC").str.strip().str.lower()
 
   return revenda_df
 
@@ -75,21 +98,10 @@ def adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df):
 
   return base_procedimentos_final
 
-def adicionar_revenda(base_procedimentos_final,base_revenda):
-
-  base_procedimentos_final = pd.concat([base_procedimentos_final,base_revenda], ignore_index=True)
-  base_procedimentos_final["valor_revenda"] = base_procedimentos_final["valor_revenda"].astype(float).fillna(0)
-  base_procedimentos_final["receita_mes"] = base_procedimentos_final["receita_mes"].astype(float).fillna(0)
-  base_procedimentos_final["receita_periodo"] = base_procedimentos_final["receita_periodo"].astype(float).fillna(0)
-
-  return base_procedimentos_final
-
 def criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df):
 
-    base_revenda = cria_base_revenda(venda_mensal_df)
     base_procedimentos_final = cria_base_agendamento(agendamentos_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
     base_procedimentos_final = adicionar_receita_avaliacao(base_procedimentos_final,venda_mensal_df)
-    base_procedimentos_final = adicionar_revenda(base_procedimentos_final,base_revenda)
 
     return base_procedimentos_final
 
@@ -116,7 +128,8 @@ def criar_comissoes(base_procedimentos_final):
     
     return base_comissoes
 
-def juntar_bases(base_comissoes,base_avaliacoes):
+def juntar_bases(base_comissoes,base_avaliacoes,revenda_df):
   base_final = pd.merge(base_comissoes,base_avaliacoes,how="left",on=["nome_prestadora","tipo_prestadora","Unidade"])
+  base_final = pd.merge(base_final,revenda_df,how="left",on=["nome_prestadora","Unidade"])
   
   return base_final
