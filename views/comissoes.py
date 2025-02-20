@@ -83,6 +83,12 @@ if "base_compilada" in st.session_state:
         "comissao_revenda": st.column_config.NumberColumn(
             "Comissão Revenda",
             format="R$ %.2f",
+        ),
+        "nome_prestadora": st.column_config.TextColumn(
+            "Prestadora"
+        ),
+        "tipo_prestadora": st.column_config.TextColumn(
+            "Tipo de Prestadora"
         )
     }
 
