@@ -132,6 +132,7 @@ def juntar_bases(base_comissoes,base_avaliacoes,revenda_df):
   base_final = pd.merge(base_comissoes,base_avaliacoes,how="left",on=["nome_prestadora","tipo_prestadora","Unidade"])
   base_final = pd.merge(base_final,revenda_df,how="left",on=["nome_prestadora","Unidade"])
 
-  base_final[["avaliacoes_total","comissao_revenda","comissao_total"]].fillna(0,inplace=True)
+  colunas_de_numeros = ["avaliacoes_total", "comissao_revenda", "comissao_total"]
+  base_final[colunas_de_numeros] = base_final[colunas_de_numeros].fillna(0)
   
   return base_final
