@@ -38,10 +38,12 @@ if processar_button:
 
     base_compilada = criar_base_compilada(agendamentos_df,venda_mensal_df,procedimentos_df,prestadora_df,comissao_df,tipo_prestadora_df)
     st.session_state["base_compilada"] = base_compilada
+    st.session_state["venda_mensal_df"] = venda_mensal_df
 
 if "base_compilada" in st.session_state:
 
     base_compilada = st.session_state["base_compilada"]
+    venda_mensal_df = st.session_state["venda_mensal_df"]
     
     periodos = base_compilada["periodo"].unique()
     periodos_series = pd.Series(periodos)
