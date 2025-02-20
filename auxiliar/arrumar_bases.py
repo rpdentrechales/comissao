@@ -131,5 +131,7 @@ def criar_comissoes(base_procedimentos_final):
 def juntar_bases(base_comissoes,base_avaliacoes,revenda_df):
   base_final = pd.merge(base_comissoes,base_avaliacoes,how="left",on=["nome_prestadora","tipo_prestadora","Unidade"])
   base_final = pd.merge(base_final,revenda_df,how="left",on=["nome_prestadora","Unidade"])
+
+  base_final[["avaliacoes_total","comissao_revenda","comissao_total"]].filna(0,inplace=True)
   
   return base_final
