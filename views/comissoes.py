@@ -93,4 +93,4 @@ if "base_compilada" in st.session_state:
     }
 
 
-    st.dataframe(base_final,hide_index=True,column_config=column_config)
+    st.dataframe(base_final,hide_index=True,column_config=column_config,use_container_width=True)
