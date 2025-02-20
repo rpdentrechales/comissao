@@ -71,4 +71,20 @@ if "base_compilada" in st.session_state:
     
     base_final = juntar_bases(base_comissoes,base_avaliacoes,base_revenda)
 
-    st.dataframe(base_final,hide_index=True)
+    column_config={
+        "comissao_total": st.column_config.NumberColumn(
+            "Comissão Total",
+            format="R$ %.2f",
+        ),
+        "avaliacoes_total": st.column_config.NumberColumn(
+            "Avaliações Total",
+            format="R$ %.2f",
+        ),
+        "comissao_revenda": st.column_config.NumberColumn(
+            "Comissão Revenda",
+            format="R$ %.2f",
+        )
+    }
+
+
+    st.dataframe(base_final,hide_index=True,column_config=column_config)
