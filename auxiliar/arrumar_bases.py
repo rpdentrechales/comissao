@@ -128,11 +128,24 @@ def criar_comissoes(base_procedimentos_final):
     
     return base_comissoes
 
-def juntar_bases(base_comissoes,base_avaliacoes,revenda_df):
+def criar_base_lavieen(base_procedimentos_final):
+  base_lavieen_filtrada = base_procedimentos_final.loc[base_procedimentos_final["procedimento_padronizado"].str.contains("lavieen",case=False,na=False)]
+  base_lavieen_groupby = base_lavieen_filtrada.groupby(["nome_prestadora","Unidade"]).agg(quantidade_lavieen=('Data', 'nunique')).reset_index()
+
+  comissao_lavieen = 500
+  base_lavieen_groupby["valor_lavieen"] = comissao_lavieen * base_lavieen_groupby["quantidade_lavieen"]
+
+  return base_lavieen_groupby
+
+def juntar_bases(base_comissoes,base_avaliacoes,revenda_df,base_lavieen):
+
+  colunas = ['nome_prestadora', 'tipo_prestadora', 'Unidade', 'comissao_total','avaliacoes_total','comissao_revenda','valor_lavieen']
+
   base_final = pd.merge(base_comissoes,base_avaliacoes,how="left",on=["nome_prestadora","tipo_prestadora","Unidade"])
   base_final = pd.merge(base_final,revenda_df,how="left",on=["nome_prestadora","Unidade"])
-
+  base_final = pd.merge(base_final,base_lavieen,how="left",on=["nome_prestadora","Unidade"])
+  
   colunas_de_numeros = ["avaliacoes_total", "comissao_revenda", "comissao_total"]
   base_final[colunas_de_numeros] = base_final[colunas_de_numeros].fillna(0)
   
-  return base_final
+  return base_final[colunas]
