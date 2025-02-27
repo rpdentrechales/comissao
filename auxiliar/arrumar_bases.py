@@ -137,15 +137,37 @@ def criar_base_lavieen(base_procedimentos_final):
 
   return base_lavieen_groupby
 
-def juntar_bases(base_comissoes,base_avaliacoes,revenda_df,base_lavieen):
+def juntar_bases(base_comissoes,base_avaliacoes,revenda_df,base_lavieen,base_garantido):
 
-  colunas = ['nome_prestadora', 'tipo_prestadora', 'Unidade', 'comissao_total','avaliacoes_total','comissao_revenda','valor_lavieen']
+  colunas = ['nome_prestadora', 'tipo_prestadora', 'Unidade', 'comissao_total','avaliacoes_total','comissao_revenda','valor_lavieen',"comissao_garantido_total"]
 
   base_final = pd.merge(base_comissoes,base_avaliacoes,how="left",on=["nome_prestadora","tipo_prestadora","Unidade"])
   base_final = pd.merge(base_final,revenda_df,how="left",on=["nome_prestadora","Unidade"])
   base_final = pd.merge(base_final,base_lavieen,how="left",on=["nome_prestadora","Unidade"])
+  base_final = pd.merge(base_final,base_garantido,how="left",on=["nome_prestadora","Unidade"])
   
-  colunas_de_numeros = ["avaliacoes_total", "comissao_revenda", "comissao_total"]
+  colunas_de_numeros = ["avaliacoes_total", "comissao_revenda", "comissao_total","valor_lavieen","comissao_garantido_total"]
   base_final[colunas_de_numeros] = base_final[colunas_de_numeros].fillna(0)
   
   return base_final[colunas]
+
+
+def criar_base_garantido(base_procedimentos_final,garantido_df):
+  base_garantido = base_procedimentos_final.groupby(["nome_prestadora","Unidade","Data"]).agg(comissao_total_dia=('valor_comissao', 'sum')).reset_index()
+  base_garantido = pd.merge(base_garantido,garantido_df,how="left",on=["nome_prestadora","Unidade"])
+
+  mask_garantido_dia = base_garantido["tipo_garantido"] == "dia"
+  mask_comissao_dia = base_garantido["comissao_total_dia"] < base_garantido["valor_garantido"]
+  base_garantido["comissao_garantido_dia"] = base_garantido["comissao_total_dia"]
+  base_garantido.loc[mask_comissao_dia&mask_garantido_dia,"comissao_garantido_dia"] = base_garantido["valor_garantido"]
+
+  groupby_total = base_garantido.groupby(["nome_prestadora","Unidade"]).agg(comissao_garantido_total = ("comissao_garantido_dia","sum")).reset_index()
+  base_garantido = pd.merge(groupby_total,garantido_df,how="left",on=["nome_prestadora","Unidade"])
+
+  mask_garantido_mes = base_garantido["tipo_garantido"] == "mes"
+  mask_comissao_mes = base_garantido["comissao_garantido_total"] < base_garantido["valor_garantido"]
+
+  base_garantido.loc[mask_garantido_mes&mask_comissao_mes,"comissao_garantido_total"] = base_garantido["valor_garantido"]
+  colunas = ["nome_prestadora","Unidade","comissao_garantido_total"]
+
+  return base_garantido[colunas]

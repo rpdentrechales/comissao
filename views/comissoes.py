@@ -10,6 +10,7 @@ comissao_df = load_from_sheets("comissoes")
 prestadora_df = load_from_sheets("base_prestadoras")
 procedimentos_df = load_from_sheets("procedimentos_padronizados")
 tipo_prestadora_df = load_from_sheets("tipo_prestadora")
+garantido_df = load_from_sheets("base_garantido")
 
 st.title("Calcular Comissões")
 
@@ -68,8 +69,10 @@ if "base_compilada" in st.session_state:
     base_comissoes = criar_comissoes(base_filtrada)
     base_avaliacoes = cria_avaliacoes(base_filtrada,tipo_pagamento)
     base_revenda = cria_base_revenda(venda_mensal_df)
+    base_lavieen = criar_base_lavieen(base_compilada)
+    base_garantido = criar_base_garantido(base_compilada,garantido_df)
     
-    base_final = juntar_bases(base_comissoes,base_avaliacoes,base_revenda)
+    base_final = juntar_bases(base_comissoes,base_avaliacoes,base_revenda,base_lavieen,base_garantido)
 
     column_config={
         "comissao_total": st.column_config.NumberColumn(
