@@ -76,7 +76,7 @@ if "base_compilada" in st.session_state:
 
     column_config={
         "comissao_total": st.column_config.NumberColumn(
-            "Comissão Total",
+            "Comissão sem Garantido",
             format="R$ %.2f",
         ),
         "avaliacoes_total": st.column_config.NumberColumn(
@@ -92,8 +92,19 @@ if "base_compilada" in st.session_state:
         ),
         "tipo_prestadora": st.column_config.TextColumn(
             "Tipo de Prestadora"
+        ),
+        "valor_lavieen": st.column_config.NumberColumn(
+            "Lavieen",
+            format="R$ %.2f",
+        ),
+        "comissao_garantido_total": st.column_config.NumberColumn(
+            "Comissão com Garantido",
+            format="R$ %.2f",
         )
     }
 
+    ordem_das_colunas = ['nome_prestadora', 'tipo_prestadora', 'Unidade', 'comissao_total',
+                         'comissao_garantido_total','avaliacoes_total', 'comissao_revenda', 'valor_lavieen'
+                        ]
 
-    st.dataframe(base_final,hide_index=True,column_config=column_config,use_container_width=True)
+    st.dataframe(base_final[ordem_das_colunas],hide_index=True,column_config=column_config,use_container_width=True)
