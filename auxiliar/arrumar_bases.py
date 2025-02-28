@@ -168,6 +168,8 @@ def criar_base_garantido(base_procedimentos_final,garantido_df):
   mask_comissao_mes = base_garantido["comissao_garantido_total"] < base_garantido["valor_garantido"]
 
   base_garantido.loc[mask_garantido_mes&mask_comissao_mes,"comissao_garantido_total"] = base_garantido["valor_garantido"]
+  base_garantido["comissao_garantido_total"] = base_garantido["comissao_garantido_total"] + base_garantido["valor_rt"]
+
   colunas = ["nome_prestadora","Unidade","comissao_garantido_total"]
 
   return base_garantido[colunas]
